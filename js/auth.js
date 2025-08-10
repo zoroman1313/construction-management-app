@@ -69,19 +69,23 @@ class SimpleAuth {
                 this.closeAuthModal();
                 return;
             }
-            // Fallback simulated sign-in
-            const mockUser = {
-                id: 'google_' + Date.now(),
-                email: 'user@gmail.com',
-                displayName: 'کاربر Google',
-                photoURL: null,
-                provider: 'google'
-            };
-            this.currentUser = mockUser;
-            localStorage.setItem('currentUser', JSON.stringify(mockUser));
-            this.showMessage('ورود با Google (دمو) انجام شد', 'success');
-            this.updateUIForLoggedInUser(mockUser);
-            this.closeAuthModal();
+            // Fallback simulated sign-in only if explicitly enabled
+            if (window.APP_CONFIG && window.APP_CONFIG.enableGoogleSimulated) {
+                const mockUser = {
+                    id: 'google_' + Date.now(),
+                    email: 'user@gmail.com',
+                    displayName: 'کاربر Google',
+                    photoURL: null,
+                    provider: 'google'
+                };
+                this.currentUser = mockUser;
+                localStorage.setItem('currentUser', JSON.stringify(mockUser));
+                this.showMessage('ورود با Google (دمو) انجام شد', 'success');
+                this.updateUIForLoggedInUser(mockUser);
+                this.closeAuthModal();
+            } else {
+                throw new Error('Google not configured');
+            }
         } catch (error) {
             console.error('Google sign-in error:', error);
             this.showMessage('خطا در ورود با Google', 'error');
