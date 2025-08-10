@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#ff8c42">
+    <meta name="msapplication-navbutton-color" content="#ff8c42">
+    <title>تست موبایل - سیستم مدیریت ساختمان</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/auth.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-building"></i>
+                <span>ساختمان</span>
+            </div>
+            
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li><a href="#" class="nav-link"><i class="fas fa-home"></i></a></li>
+                    <li><a href="#" class="nav-link"><i class="fas fa-tasks"></i></a></li>
+                    <li><a href="#" class="nav-link"><i class="fas fa-users"></i></a></li>
+                    <li><a href="#" class="nav-link"><i class="fas fa-tools"></i></a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <h1 class="main-title">تست موبایل</h1>
+            <p class="main-subtitle">بررسی سازگاری با سایز صفحه موبایل</p>
+            
+            <!-- Test all sections -->
+            <div class="section-header">
+                <button class="back-btn" onclick="goBack()">
+                    <i class="fas fa-arrow-right"></i>
+                    بازگشت
+                </button>
+                <h2 class="section-title">تست تمام بخش‌ها</h2>
+                <p class="section-subtitle">برای بررسی موبایل فرندلی بودن</p>
+            </div>
+            
+            <!-- Users Grid Test -->
+            <div class="users-grid">
+                <div class="user-category">
+                    <div class="category-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>کارجویان</h3>
+                    <p>کسانی که دنبال کار می‌گردند</p>
+                </div>
+                
+                <div class="user-category">
+                    <div class="category-icon">
+                        <i class="fas fa-user-hard-hat"></i>
+                    </div>
+                    <h3>کارگران</h3>
+                    <p>کارگران ساده و متخصص</p>
+                </div>
+                
+                <div class="user-category">
+                    <div class="category-icon">
+                        <i class="fas fa-hard-hat"></i>
+                    </div>
+                    <h3>پیمانکاران</h3>
+                    <p>پیمانکاران و شرکت‌های ساختمانی</p>
+                </div>
+            </div>
+            
+            <!-- Contractors Grid Test -->
+            <div class="contractors-grid">
+                <div class="contractor-service">
+                    <div class="service-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>گزارش‌ها</h3>
+                    <p>گزارش‌های مالی و پیشرفت پروژه</p>
+                </div>
+                
+                <div class="contractor-service">
+                    <div class="service-icon">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <h3>برآورد پروژه</h3>
+                    <p>محاسبه هزینه و زمان پروژه</p>
+                </div>
+                
+                <div class="contractor-service">
+                    <div class="service-icon">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <h3>مدیریت پروژه</h3>
+                    <p>پروژه‌های جدید و در حال اجرا</p>
+                </div>
+            </div>
+            
+            <!-- Providers Grid Test -->
+            <div class="providers-grid">
+                <div class="provider-category">
+                    <div class="category-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <h3>خدمات</h3>
+                    <p>ارایه خدمات ساختمانی</p>
+                </div>
+                
+                <div class="provider-category">
+                    <div class="category-icon">
+                        <i class="fas fa-truck"></i>
+                    </div>
+                    <h3>مصالح</h3>
+                    <p>فروش مصالح ساختمانی</p>
+                </div>
+                
+                <div class="provider-category">
+                    <div class="category-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h3>تجهیزات</h3>
+                    <p>اجاره و فروش تجهیزات</p>
+                </div>
+            </div>
+            
+            <!-- Mobile Info -->
+            <div style="margin-top: 3rem; padding: 2rem; background: #f8f9fa; border-radius: 15px; text-align: center;">
+                <h3 style="color: #2c3e50; margin-bottom: 1rem;">اطلاعات موبایل</h3>
+                <p id="mobileInfo" style="color: #6c757d; font-size: 0.9rem;">در حال بارگذاری...</p>
+                <button onclick="checkMobileInfo()" style="margin-top: 1rem; padding: 0.8rem 1.5rem; background: #ff6b35; color: white; border: none; border-radius: 8px; cursor: pointer;">
+                    بررسی اطلاعات موبایل
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 سیستم مدیریت ساختمان - تست موبایل</p>
+    </footer>
+
+    <script>
+        function goBack() {
+            window.location.href = 'index.html';
+        }
+        
+        function checkMobileInfo() {
+            const info = document.getElementById('mobileInfo');
+            const isMobile = window.innerWidth <= 767;
+            const orientation = window.innerWidth > window.innerHeight ? 'Landscape' : 'Portrait';
+            const breakpoint = getBreakpoint();
+            
+            info.innerHTML = `
+                <strong>سایز صفحه:</strong> ${window.innerWidth} × ${window.innerHeight}<br>
+                <strong>نوع دستگاه:</strong> ${isMobile ? 'موبایل' : 'دسکتاپ'}<br>
+                <strong>جهت:</strong> ${orientation}<br>
+                <strong>نقطه شکست:</strong> ${breakpoint}<br>
+                <strong>User Agent:</strong> ${navigator.userAgent.substring(0, 50)}...
+            `;
+        }
+        
+        function getBreakpoint() {
+            if (window.innerWidth <= 480) return 'XS (Extra Small)';
+            if (window.innerWidth <= 767) return 'SM (Small)';
+            if (window.innerWidth <= 1023) return 'MD (Medium)';
+            return 'LG (Large)';
+        }
+        
+        // Auto-check on load
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(checkMobileInfo, 500);
+        });
+        
+        // Check on resize
+        window.addEventListener('resize', function() {
+            setTimeout(checkMobileInfo, 100);
+        });
+    </script>
+</body>
+</html>

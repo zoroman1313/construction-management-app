@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تست Firebase - سیستم مدیریت ساختمان</title>
+    <style>
+        body {
+            font-family: Tahoma, Arial, sans-serif;
+            direction: rtl;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            color: white;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: center;
+        }
+        .success { background: rgba(76, 175, 80, 0.8); }
+        .error { background: rgba(244, 67, 54, 0.8); }
+        .info { background: rgba(33, 150, 243, 0.8); }
+        .warning { background: rgba(255, 152, 0, 0.8); }
+        .test-section {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        button {
+            background: #ff8c42;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        button:hover { background: #e67e22; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        .config-display {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 تست Firebase</h1>
+        <p>این صفحه برای تست کردن تنظیمات Firebase طراحی شده است.</p>
+        
+        <div id="status" class="status info">
+            در حال بررسی تنظیمات Firebase...
+        </div>
+        
+        <div class="test-section">
+            <h3>📋 وضعیت پیکربندی</h3>
+            <div id="configStatus"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🔐 تست احراز هویت</h3>
+            <button id="testAuth" disabled>تست Authentication</button>
+            <button id="testGoogle" disabled>تست Google Sign-In</button>
+            <div id="authStatus"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>📊 اطلاعات پروژه</h3>
+            <div id="projectInfo"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🔧 تنظیمات فعلی</h3>
+            <div id="currentConfig" class="config-display">
+                در حال بارگذاری...
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>📱 راهنمای تنظیم</h3>
+            <p>اگر Firebase کار نمی‌کند:</p>
+            <ol>
+                <li>فایل <code>js/firebase-config.js</code> را باز کنید</li>
+                <li>مقادیر واقعی Firebase را وارد کنید</li>
+                <li>صفحه را refresh کنید</li>
+                <li>مطمئن شوید که Authentication در Firebase Console فعال است</li>
+            </ol>
+            <a href="FIREBASE_SETUP.md" target="_blank" style="color: #ffcc00;">
+                📖 راهنمای کامل تنظیم Firebase
+            </a>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    
+    <!-- Your Firebase Config -->
+    <script src="js/firebase-config.js"></script>
+    
+    <script>
+        // Test Firebase Configuration
+        class FirebaseTester {
+            constructor() {
+                this.statusDiv = document.getElementById('status');
+                this.configStatusDiv = document.getElementById('configStatus');
+                this.authStatusDiv = document.getElementById('authStatus');
+                this.projectInfoDiv = document.getElementById('projectInfo');
+                this.currentConfigDiv = document.getElementById('currentConfig');
+                this.testAuthBtn = document.getElementById('testAuth');
+                this.testGoogleBtn = document.getElementById('testGoogle');
+                
+                this.runTests();
+            }
+            
+            async runTests() {
+                await this.testConfiguration();
+                await this.testFirebaseInitialization();
+                await this.testAuthentication();
+                this.showProjectInfo();
+            }
+            
+            async testConfiguration() {
+                this.updateStatus('در حال بررسی پیکربندی...', 'info');
+                
+                // Check if firebaseConfig exists
+                if (typeof firebaseConfig === 'undefined') {
+                    this.showConfigError('firebaseConfig تعریف نشده است');
+                    return false;
+                }
+                
+                // Check required fields
+                const requiredFields = ['apiKey', 'authDomain', 'projectId', 'storageBucket', 'messagingSenderId', 'appId'];
+                const missingFields = requiredFields.filter(field => 
+                    !firebaseConfig[field] || 
+                    firebaseConfig[field].includes('YOUR_') || 
+                    firebaseConfig[field] === ''
+                );
+                
+                if (missingFields.length > 0) {
+                    this.showConfigError(`فیلدهای زیر ناقص هستند: ${missingFields.join(', ')}`);
+                    return false;
+                }
+                
+                this.showConfigSuccess('پیکربندی Firebase صحیح است');
+                return true;
+            }
+            
+            async testFirebaseInitialization() {
+                this.updateStatus('در حال تست Firebase...', 'info');
+                
+                try {
+                    // Wait a bit for Firebase to initialize
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    
+                    if (typeof firebase === 'undefined') {
+                        this.updateStatus('Firebase SDK بارگذاری نشده است', 'error');
+                        return false;
+                    }
+                    
+                    if (!firebase.apps || firebase.apps.length === 0) {
+                        this.updateStatus('Firebase App initialize نشده است', 'error');
+                        return false;
+                    }
+                    
+                    this.updateStatus('Firebase با موفقیت initialize شده است!', 'success');
+                    return true;
+                    
+                } catch (error) {
+                    this.updateStatus(`خطا در تست Firebase: ${error.message}`, 'error');
+                    return false;
+                }
+            }
+            
+            async testAuthentication() {
+                this.updateStatus('در حال تست Authentication...', 'info');
+                
+                try {
+                    if (typeof auth === 'undefined') {
+                        this.updateStatus('Authentication در دسترس نیست', 'error');
+                        return false;
+                    }
+                    
+                    // Test auth methods
+                    const methods = await auth.fetchSignInMethodsForEmail('test@example.com');
+                    this.updateStatus('Authentication آماده است!', 'success');
+                    
+                    // Enable test buttons
+                    this.testAuthBtn.disabled = false;
+                    this.testGoogleBtn.disabled = false;
+                    
+                    return true;
+                    
+                } catch (error) {
+                    this.updateStatus(`خطا در تست Authentication: ${error.message}`, 'error');
+                    return false;
+                }
+            }
+            
+            showProjectInfo() {
+                if (firebaseConfig && firebaseConfig.projectId) {
+                    this.projectInfoDiv.innerHTML = `
+                        <p><strong>شناسه پروژه:</strong> ${firebaseConfig.projectId}</p>
+                        <p><strong>دامنه:</strong> ${firebaseConfig.authDomain}</p>
+                        <p><strong>وضعیت:</strong> <span style="color: #4caf50;">فعال</span></p>
+                    `;
+                } else {
+                    this.projectInfoDiv.innerHTML = '<p style="color: #f44336;">اطلاعات پروژه در دسترس نیست</p>';
+                }
+                
+                // Show current config
+                this.currentConfigDiv.innerHTML = JSON.stringify(firebaseConfig, null, 2);
+            }
+            
+            showConfigSuccess(message) {
+                this.configStatusDiv.innerHTML = `<div class="status success">✅ ${message}</div>`;
+            }
+            
+            showConfigError(message) {
+                this.configStatusDiv.innerHTML = `<div class="status error">❌ ${message}</div>`;
+            }
+            
+            updateStatus(message, type) {
+                this.statusDiv.textContent = message;
+                this.statusDiv.className = `status ${type}`;
+            }
+        }
+        
+        // Initialize tester when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new FirebaseTester();
+        });
+        
+        // Test Authentication button
+        document.getElementById('testAuth').addEventListener('click', async () => {
+            const authStatusDiv = document.getElementById('authStatus');
+            authStatusDiv.innerHTML = '<div class="status info">در حال تست...</div>';
+            
+            try {
+                if (typeof auth !== 'undefined') {
+                    authStatusDiv.innerHTML = '<div class="status success">✅ Authentication کار می‌کند!</div>';
+                } else {
+                    authStatusDiv.innerHTML = '<div class="status error">❌ Authentication در دسترس نیست</div>';
+                }
+            } catch (error) {
+                authStatusDiv.innerHTML = `<div class="status error">❌ خطا: ${error.message}</div>`;
+            }
+        });
+        
+        // Test Google Sign-In button
+        document.getElementById('testGoogle').addEventListener('click', async () => {
+            const authStatusDiv = document.getElementById('authStatus');
+            authStatusDiv.innerHTML = '<div class="status info">در حال تست Google Sign-In...</div>';
+            
+            try {
+                if (typeof firebase !== 'undefined' && firebase.auth) {
+                    authStatusDiv.innerHTML = '<div class="status success">✅ Google Sign-In آماده است!</div>';
+                } else {
+                    authStatusDiv.innerHTML = '<div class="status error">❌ Google Sign-In در دسترس نیست</div>';
+                }
+            } catch (error) {
+                authStatusDiv.innerHTML = `<div class="status error">❌ خطا: ${error.message}</div>`;
+            }
+        });
+    </script>
+</body>
+</html>

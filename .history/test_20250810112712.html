@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تست ورود با Google</title>
+    <link rel="stylesheet" href="css/auth.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+</head>
+<body>
+    <div style="padding: 2rem; text-align: center;">
+        <h1>تست ورود با Google</h1>
+        <p>برای تست عملکرد دکمه‌های ورود با Google</p>
+        
+        <button onclick="openAuthModal()" style="padding: 1rem 2rem; font-size: 1.2rem; margin: 1rem;">
+            باز کردن فرم ورود
+        </button>
+    </div>
+
+    <!-- Auth Modal -->
+    <div id="authModal" class="auth-modal">
+        <div class="auth-content">
+            <div class="auth-header">
+                <h2 id="authTitle">ورود به سیستم</h2>
+                <button class="close-btn" id="closeAuth">&times;</button>
+            </div>
+            
+            <!-- Login Form -->
+            <form id="loginForm" class="auth-form">
+                <div class="form-group">
+                    <label for="loginEmail">ایمیل:</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">رمز عبور:</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit" class="auth-submit">ورود</button>
+                
+                <!-- Google Sign-In Button -->
+                <div class="social-login">
+                    <div class="divider">
+                        <span>یا</span>
+                    </div>
+                    <button type="button" id="googleSignIn" class="google-signin-btn">
+                        <i class="fab fa-google"></i>
+                        <span>ورود با Google</span>
+                    </button>
+                </div>
+                
+                <p class="auth-switch">
+                    حساب کاربری ندارید؟ 
+                    <a href="#" id="showRegister">ثبت‌نام کنید</a>
+                </p>
+            </form>
+            
+            <!-- Register Form -->
+            <form id="registerForm" class="auth-form" style="display: none;">
+                <div class="form-group">
+                    <label for="registerName">نام کامل:</label>
+                    <input type="text" id="registerName" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">ایمیل:</label>
+                    <input type="email" id="registerEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPhone">شماره تلفن:</label>
+                    <input type="tel" id="registerPhone" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">رمز عبور:</label>
+                    <input type="password" id="registerPassword" required>
+                </div>
+                <button type="submit" class="auth-submit">ثبت‌نام</button>
+                
+                <!-- Google Sign-In Button -->
+                <div class="social-login">
+                    <div class="divider">
+                        <span>یا</span>
+                    </div>
+                    <button type="button" id="googleSignInRegister" class="google-signin-btn">
+                        <i class="fab fa-google"></i>
+                        <span>ثبت‌نام با Google</span>
+                    </button>
+                </div>
+                
+                <p class="auth-switch">
+                    قبلاً ثبت‌نام کرده‌اید؟ 
+                    <a href="#" id="showLogin">ورود کنید</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Simple test functions
+        function openAuthModal() {
+            document.getElementById('authModal').classList.add('show');
+        }
+        
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.remove('show');
+        }
+        
+        // Setup basic functionality for testing
+        document.addEventListener('DOMContentLoaded', function() {
+            const closeAuth = document.getElementById('closeAuth');
+            const showRegister = document.getElementById('showRegister');
+            const showLogin = document.getElementById('showLogin');
+            const authModal = document.getElementById('authModal');
+            
+            // Close modal
+            closeAuth.addEventListener('click', closeAuthModal);
+            
+            // Close modal on outside click
+            authModal.addEventListener('click', (e) => {
+                if (e.target === authModal) closeAuthModal();
+            });
+            
+            // Switch between forms
+            showRegister.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('registerForm').style.display = 'block';
+                document.getElementById('authTitle').textContent = 'ثبت‌نام در سیستم';
+            });
+            
+            showLogin.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.getElementById('registerForm').style.display = 'none';
+                document.getElementById('loginForm').style.display = 'block';
+                document.getElementById('authTitle').textContent = 'ورود به سیستم';
+            });
+            
+            // Test Google buttons
+            const googleSignIn = document.getElementById('googleSignIn');
+            const googleSignInRegister = document.getElementById('googleSignInRegister');
+            
+            googleSignIn.addEventListener('click', () => {
+                alert('دکمه ورود با Google کلیک شد! (در نسخه کامل با Firebase کار می‌کند)');
+            });
+            
+            googleSignInRegister.addEventListener('click', () => {
+                alert('دکمه ثبت‌نام با Google کلیک شد! (در نسخه کامل با Firebase کار می‌کند)');
+            });
+        });
+    </script>
+</body>
+</html>
