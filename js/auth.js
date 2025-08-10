@@ -29,7 +29,7 @@ class SimpleAuth {
             this.showLogin.addEventListener('click', (e) => this.switchToLogin(e));
         }
         
-        // Google Sign-In buttons (simulated)
+        // Google Sign-In
         this.setupGoogleSignIn();
         
         // Check auth state
@@ -47,10 +47,29 @@ class SimpleAuth {
         }
     }
 
-    // 🔑 Simulated Google Sign-In
+    // 🔑 Google Sign-In (GIS if configured; otherwise simulated)
     async signInWithGoogle() {
         try {
-            // Simulate Google sign-in
+            const clientId = window.APP_CONFIG && window.APP_CONFIG.googleClientId;
+            if (clientId && window.google && window.google.accounts && window.google.accounts.id) {
+                const credential = await this.getGoogleCredentialViaGis(clientId);
+                if (!credential) throw new Error('no_credential');
+                const profile = this.parseJwt(credential);
+                const user = {
+                    id: profile.sub,
+                    email: profile.email,
+                    displayName: profile.name || profile.email,
+                    photoURL: profile.picture || null,
+                    provider: 'google'
+                };
+                this.currentUser = user;
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                this.showMessage('ورود با Google موفقیت‌آمیز! 🎉', 'success');
+                this.updateUIForLoggedInUser(user);
+                this.closeAuthModal();
+                return;
+            }
+            // Fallback simulated sign-in
             const mockUser = {
                 id: 'google_' + Date.now(),
                 email: 'user@gmail.com',
@@ -58,18 +77,46 @@ class SimpleAuth {
                 photoURL: null,
                 provider: 'google'
             };
-            
             this.currentUser = mockUser;
             localStorage.setItem('currentUser', JSON.stringify(mockUser));
-            
-            this.showMessage('ورود با Google موفقیت‌آمیز! 🎉', 'success');
+            this.showMessage('ورود با Google (دمو) انجام شد', 'success');
             this.updateUIForLoggedInUser(mockUser);
             this.closeAuthModal();
-            
         } catch (error) {
             console.error('Google sign-in error:', error);
             this.showMessage('خطا در ورود با Google', 'error');
         }
+    }
+
+    getGoogleCredentialViaGis(clientId) {
+        return new Promise((resolve, reject) => {
+            try {
+                window.google.accounts.id.initialize({
+                    client_id: clientId,
+                    callback: (response) => {
+                        if (response && response.credential) resolve(response.credential);
+                    }
+                });
+                window.google.accounts.id.prompt((notification) => {
+                    if (notification && (notification.isNotDisplayed() || notification.isSkippedMoment())) {
+                        // Attempt again quickly
+                        window.google.accounts.id.prompt();
+                    }
+                });
+                setTimeout(() => resolve(null), 7000);
+            } catch (e) { reject(e); }
+        });
+    }
+
+    parseJwt(token) {
+        try {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            return JSON.parse(jsonPayload);
+        } catch { return {}; }
     }
 
     // 📝 Handle login form submission
