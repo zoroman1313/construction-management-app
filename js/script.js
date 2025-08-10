@@ -8,14 +8,14 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeMainMenu();
     
     // Initialize authentication system
-    if (typeof ConstructionAuth !== 'undefined') {
+    if (typeof SimpleAuth !== 'undefined') {
         try {
-            new ConstructionAuth();
+            window.simpleAuth = new SimpleAuth();
         } catch (error) {
             console.error('❌ Error initializing authentication:', error);
         }
     } else {
-        console.warn('⚠️ ConstructionAuth class not found. Make sure auth.js is loaded.');
+        console.warn('⚠️ SimpleAuth class not found. Make sure auth.js is loaded.');
     }
     
     // Add mobile-specific enhancements
@@ -150,7 +150,9 @@ function initializeMainMenu() {
     const usersMenu = document.getElementById('usersMenu');
     if (usersMenu) {
         usersMenu.addEventListener('click', () => {
-            navigateToSection('users');
+            // Always redirect to login page with intended destination
+            localStorage.setItem('intendedDestination', 'users');
+            window.location.href = 'pages/login.html?destination=users';
         });
     }
     
@@ -158,7 +160,9 @@ function initializeMainMenu() {
     const contractorsMenu = document.getElementById('contractorsMenu');
     if (contractorsMenu) {
         contractorsMenu.addEventListener('click', () => {
-            navigateToSection('contractors');
+            // Always redirect to login page with intended destination
+            localStorage.setItem('intendedDestination', 'contractors');
+            window.location.href = 'pages/login.html?destination=contractors';
         });
     }
     
@@ -166,7 +170,9 @@ function initializeMainMenu() {
     const providersMenu = document.getElementById('providersMenu');
     if (providersMenu) {
         providersMenu.addEventListener('click', () => {
-            navigateToSection('providers');
+            // Always redirect to login page with intended destination
+            localStorage.setItem('intendedDestination', 'providers');
+            window.location.href = 'pages/login.html?destination=providers';
         });
     }
     
@@ -176,15 +182,11 @@ function initializeMainMenu() {
 
 // Check initial authentication state
 function checkInitialAuthState() {
-    if (typeof firebase !== 'undefined' && firebase.auth) {
-        const currentUser = firebase.auth().currentUser;
-        if (currentUser) {
-            console.log('✅ User already logged in:', currentUser.email);
-            // Update UI to show user profile
-            if (window.constructionAuth) {
-                window.constructionAuth.updateUIForLoggedInUser(currentUser);
-            }
-        }
+    // Check if user is logged in using SimpleAuth
+    if (window.simpleAuth && window.simpleAuth.currentUser) {
+        console.log('✅ User already logged in:', window.simpleAuth.currentUser.email);
+        // Update UI to show user profile
+        window.simpleAuth.updateUIForLoggedInUser(window.simpleAuth.currentUser);
     }
 }
 
@@ -192,47 +194,24 @@ function checkInitialAuthState() {
 function navigateToSection(section) {
     console.log(`🚀 Navigating to ${section} section`);
     
-    // Check if user is authenticated
-    if (typeof firebase !== 'undefined' && firebase.auth) {
-        const currentUser = firebase.auth().currentUser;
-        
-        if (!currentUser) {
-            // User is not logged in, show login modal
-            console.log('❌ User not authenticated, showing login modal');
-            if (window.constructionAuth) {
-                console.log('🔐 Using constructionAuth for login');
-                window.constructionAuth.showLoginForSection(section);
-            } else {
-                // Fallback: show simple login prompt
-                console.log('⚠️ constructionAuth not available, showing fallback login prompt');
-                showLoginPrompt(section);
-            }
-            return;
-        } else {
-            // User is logged in, proceed to section
-            console.log('✅ User authenticated, proceeding to section');
-            proceedToSection(section);
-        }
-    } else {
-        // Firebase not available, proceed without auth check
-        console.log('⚠️ Firebase not available, proceeding without auth check');
+    // Check if user is authenticated using SimpleAuth
+    if (window.simpleAuth && window.simpleAuth.isLoggedIn()) {
+        // User is logged in, proceed to section
+        console.log('✅ User authenticated, proceeding to section');
         proceedToSection(section);
+    } else {
+        // User is not logged in, redirect to login page
+        console.log('❌ User not authenticated, redirecting to login page');
+        localStorage.setItem('intendedDestination', section);
+        window.location.href = `pages/login.html?destination=${section}`;
     }
 }
 
-// Show login prompt for specific section
+// Show login prompt for specific section (deprecated - now redirects to login page)
 function showLoginPrompt(section) {
-    const message = `برای دسترسی به بخش "${getSectionName(section)}" ابتدا باید وارد شوید.`;
-    console.log('📝 Showing login prompt:', message);
-    alert(message);
-    
-    // Try to show auth modal if available
-    if (window.constructionAuth) {
-        console.log('🔐 Attempting to show auth modal');
-        window.constructionAuth.toggleAuthModal();
-    } else {
-        console.log('❌ constructionAuth not available for modal display');
-    }
+    console.log('⚠️ showLoginPrompt is deprecated, redirecting to login page');
+    localStorage.setItem('intendedDestination', section);
+    window.location.href = `pages/login.html?destination=${section}`;
 }
 
 // Get Persian section name
@@ -249,159 +228,29 @@ function getSectionName(section) {
 function proceedToSection(section) {
     console.log(`🎯 Proceeding to section: ${section}`);
     
-    // Show loading state
-    showLoadingMessage();
-    
-    // Simulate navigation (will be replaced with actual page navigation)
-    setTimeout(() => {
-        hideLoadingMessage();
-        
-        switch(section) {
-            case 'users':
-                console.log('👥 Showing users section');
-                showUsersSection();
-                break;
-            case 'contractors':
-                console.log('🏗️ Showing contractors section');
-                showContractorsSection();
-                break;
-            case 'providers':
-                console.log('🤝 Showing providers section');
-                showProvidersSection();
-                break;
-            default:
-                console.log('❓ Unknown section:', section);
-        }
-        
-        // Reinitialize mobile enhancements for new content
-        setTimeout(() => {
-            initializeMobileEnhancements();
-        }, 100);
-    }, 1000);
+    // Navigate directly to the selected section
+    switch(section) {
+        case 'users':
+            console.log('👥 Navigating to users page');
+            window.location.href = 'pages/users.html';
+            break;
+        case 'contractors':
+            console.log('🏗️ Navigating to contractors page');
+            window.location.href = 'pages/contractors.html';
+            break;
+        case 'providers':
+            console.log('🤝 Navigating to providers page');
+            window.location.href = 'pages/providers.html';
+            break;
+        default:
+            console.log('❓ Unknown section:', section);
+            // Go back to main page
+            window.location.href = 'index.html';
+    }
 }
 
-// Show Users Section
-function showUsersSection() {
-    const mainContent = document.querySelector('.main .container');
-    mainContent.innerHTML = `
-        <div class="section-header">
-            <button class="back-btn" onclick="goBackToMain()">
-                <i class="fas fa-arrow-right"></i>
-                بازگشت
-            </button>
-            <h1 class="section-title">مدیریت کاربران</h1>
-            <p class="section-subtitle">کارجویان، کارگران، متخصصین و پیمانکاران</p>
-        </div>
-        
-        <div class="users-grid">
-            <div class="user-category" onclick="showUserCategory('jobseekers')">
-                <div class="category-icon">
-                    <i class="fas fa-search"></i>
-                </div>
-                <h3>کارجویان</h3>
-                <p>کسانی که دنبال کار می‌گردند</p>
-            </div>
-            
-            <div class="user-category" onclick="showUserCategory('workers')">
-                <div class="category-icon">
-                    <i class="fas fa-user-hard-hat"></i>
-                </div>
-                <h3>کارگران</h3>
-                <p>کارگران ساده و متخصص</p>
-            </div>
-            
-            <div class="user-category" onclick="showUserCategory('contractors')">
-                <div class="category-icon">
-                    <i class="fas fa-hard-hat"></i>
-                </div>
-                <h3>پیمانکاران</h3>
-                <p>پیمانکاران و شرکت‌های ساختمانی</p>
-            </div>
-        </div>
-    `;
-}
-
-// Show Contractors Section
-function showContractorsSection() {
-    const mainContent = document.querySelector('.main .container');
-    mainContent.innerHTML = `
-        <div class="section-header">
-            <button class="back-btn" onclick="goBackToMain()">
-                <i class="fas fa-arrow-right"></i>
-                بازگشت
-            </button>
-            <h1 class="section-title">خدمات پیمانکاران</h1>
-            <p class="section-subtitle">گزارش، برآورد، پروژه‌های جدید و در حال اجرا</p>
-        </div>
-        
-        <div class="contractors-grid">
-            <div class="contractor-service" onclick="showContractorService('reports')">
-                <div class="service-icon">
-                    <i class="fas fa-chart-line"></i>
-                </div>
-                <h3>گزارش‌ها</h3>
-                <p>گزارش‌های مالی و پیشرفت پروژه</p>
-            </div>
-            
-            <div class="contractor-service" onclick="showContractorService('estimates')">
-                <div class="service-icon">
-                    <i class="fas fa-calculator"></i>
-                </div>
-                <h3>برآورد پروژه</h3>
-                <p>محاسبه هزینه و زمان پروژه</p>
-            </div>
-            
-            <div class="contractor-service" onclick="showContractorService('projects')">
-                <div class="service-icon">
-                    <i class="fas fa-project-diagram"></i>
-                </div>
-                <h3>مدیریت پروژه</h3>
-                <p>پروژه‌های جدید و در حال اجرا</p>
-            </div>
-        </div>
-    `;
-}
-
-// Show Providers Section
-function showProvidersSection() {
-    const mainContent = document.querySelector('.main .container');
-    mainContent.innerHTML = `
-        <div class="section-header">
-            <button class="back-btn" onclick="goBackToMain()">
-                <i class="fas fa-arrow-right"></i>
-                بازگشت
-            </button>
-            <h1 class="section-title">ارایه دهندگان</h1>
-            <p class="section-subtitle">کسانی که کار یا جنسی دارند و دنبال خریدار یا نیرو می‌گردند</p>
-        </div>
-        
-        <div class="providers-grid">
-            <div class="provider-category" onclick="showProviderCategory('services')">
-                <div class="category-icon">
-                    <i class="fas fa-tools"></i>
-                </div>
-                <h3>خدمات</h3>
-                <p>ارایه خدمات ساختمانی</p>
-            </div>
-            
-            <div class="provider-category" onclick="showProviderCategory('materials')">
-                <div class="category-icon">
-                    <i class="fas fa-truck"></i>
-                </div>
-                <h3>مصالح</h3>
-                <p>فروش مصالح ساختمانی</p>
-            </div>
-            
-            <div class="provider-category" onclick="showProviderCategory('equipment')">
-                <div class="category-icon">
-                    <i class="fas fa-cogs"></i>
-                </div>
-                <h3>تجهیزات</h3>
-                <p>اجاره و فروش تجهیزات</p>
-            </div>
-        </div>
-    `;
-}
+// These functions are now deprecated - navigation is handled directly in proceedToSection
+// توابع قدیمی - هدایت مستقیماً در proceedToSection انجام می‌شود
 
 // Go back to main menu
 function goBackToMain() {

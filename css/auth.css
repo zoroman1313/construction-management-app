@@ -597,6 +597,28 @@
     }
 }
 
+/* Register Pro - inline rows, otp, suggestions */
+.input-row { display: grid; grid-template-columns: 1fr auto; gap: .5rem; align-items: center; }
+.send-code-btn {
+  background:#fff;border:2px solid #ff8c42;color:#ff8c42;padding:.6rem .8rem;border-radius:10px;cursor:pointer;font-weight:600;
+}
+.send-code-btn[disabled]{opacity:.6;cursor:not-allowed}
+.otp-row { display:flex; gap:.5rem; align-items:center; margin-top:.5rem; }
+.status-badge { font-size:.85rem; padding:.25rem .5rem; border-radius:8px; background:#f1f2f6; color:#7f8c8d; }
+.status-badge.success { background:#e9f7ef; color:#27ae60; }
+.status-badge.error { background:#fdecea; color:#e74c3c; }
+
+.hint { color:#7f8c8d; font-size:.85rem; margin-top:.25rem; }
+
+.suggestions {
+  list-style:none; margin:.3rem 0 0; padding:0; border:1px solid #ecf0f1; border-radius:10px; background:#fff;
+  max-height:220px; overflow:auto; display:none;
+}
+.suggestions.show { display:block; }
+.suggestions li { padding:.6rem .8rem; cursor:pointer; display:flex; justify-content:space-between; gap:.5rem; }
+.suggestions li:hover { background:#f8f9fa; }
+.checkbox-row input[type="checkbox"] { transform: translateY(2px); }
+
 /* User Profile Display */
 .user-profile {
     display: flex;

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ارایه دهندگان خدمات - سیستم مدیریت ساختمان</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/auth.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-building"></i>
+                <span>ساختمان</span>
+            </div>
+            
+            <!-- User Profile Section -->
+            <div class="user-profile" id="userProfile" style="display: none;">
+                <div class="user-info">
+                    <img src="../images/default-avatar.svg" alt="عکس پروفایل" class="user-avatar" id="userAvatar">
+                    <span class="user-name" id="userName">نام کاربر</span>
+                </div>
+                <button class="logout-btn" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>خروج</span>
+                </button>
+            </div>
+            
+            <!-- Back Button -->
+            <button class="back-btn" onclick="goBack()">
+                <i class="fas fa-arrow-right"></i>
+                <span>بازگشت</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <h1 class="main-title">ارایه دهندگان خدمات</h1>
+            <p class="main-subtitle">کسانی که کار یا جنسی دارند و دنبال خریدار یا نیرو می‌گردند</p>
+            
+            <!-- Service Categories -->
+            <div class="service-categories">
+                <div class="category-item" onclick="showProviderCategory('materials')">
+                    <div class="category-icon">
+                        <i class="fas fa-boxes"></i>
+                    </div>
+                    <h3 class="category-title">مواد و مصالح</h3>
+                    <p class="category-description">سیمان، آجر، فولاد، چوب و سایر مصالح ساختمانی</p>
+                </div>
+                
+                <div class="category-item" onclick="showProviderCategory('equipment')">
+                    <div class="category-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <h3 class="category-title">ابزار و تجهیزات</h3>
+                    <p class="category-description">ابزار دستی، ماشین‌آلات، تجهیزات ایمنی</p>
+                </div>
+                
+                <div class="category-item" onclick="showProviderCategory('services')">
+                    <div class="category-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h3 class="category-title">خدمات تخصصی</h3>
+                    <p class="category-description">طراحی، مشاوره، نظارت و کنترل کیفیت</p>
+                </div>
+                
+                <div class="category-item" onclick="showProviderCategory('labor')">
+                    <div class="category-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="category-title">نیروی کار</h3>
+                    <p class="category-description">کارگران ماهر، متخصصین و تکنسین‌ها</p>
+                </div>
+            </div>
+            
+            <!-- Featured Providers -->
+            <section class="featured-providers">
+                <h2 class="section-title">ارایه دهندگان برتر</h2>
+                <div class="providers-grid">
+                    <div class="provider-card">
+                        <div class="provider-header">
+                            <img src="../images/default-avatar.svg" alt="ارایه دهنده" class="provider-avatar">
+                            <div class="provider-info">
+                                <h3 class="provider-name">شرکت مصالح ساختمانی تهران</h3>
+                                <p class="provider-type">مواد و مصالح</p>
+                                <div class="provider-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                    <span>4.5</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="provider-description">ارایه دهنده انواع مصالح ساختمانی با کیفیت بالا و قیمت مناسب</p>
+                        <div class="provider-actions">
+                            <button class="contact-btn">تماس</button>
+                            <button class="details-btn">جزئیات</button>
+                        </div>
+                    </div>
+                    
+                    <div class="provider-card">
+                        <div class="provider-header">
+                            <img src="../images/default-avatar.svg" alt="ارایه دهنده" class="provider-avatar">
+                            <div class="provider-info">
+                                <h3 class="provider-name">گروه ابزارآلات صنعتی</h3>
+                                <p class="provider-type">ابزار و تجهیزات</p>
+                                <div class="provider-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <span>5.0</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="provider-description">تخصص در ارایه ابزارآلات حرفه‌ای و تجهیزات ایمنی</p>
+                        <div class="provider-actions">
+                            <button class="contact-btn">تماس</button>
+                            <button class="details-btn">جزئیات</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 سیستم مدیریت ساختمان</p>
+    </footer>
+
+    <script src="../js/auth.js"></script>
+    <script>
+        // Check authentication on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.simpleAuth && !window.simpleAuth.isLoggedIn()) {
+                // Redirect to login if not authenticated
+                window.location.href = 'login.html?destination=providers';
+                return;
+            }
+            
+            // Update UI for logged in user
+            if (window.simpleAuth && window.simpleAuth.isLoggedIn()) {
+                updateUIForLoggedInUser();
+            }
+        });
+        
+        function updateUIForLoggedInUser() {
+            const userProfile = document.getElementById('userProfile');
+            const userName = document.getElementById('userName');
+            const userAvatar = document.getElementById('userAvatar');
+            
+            if (userProfile && userName && userAvatar) {
+                const currentUser = window.simpleAuth.getCurrentUser();
+                if (currentUser) {
+                    userName.textContent = currentUser.name || 'کاربر';
+                    userProfile.style.display = 'flex';
+                }
+            }
+        }
+        
+        function showProviderCategory(category) {
+            console.log('Showing provider category:', category);
+            // This will be implemented to show specific category details
+            alert(`نمایش دسته‌بندی: ${category}`);
+        }
+        
+        function goBack() {
+            window.history.back();
+        }
+        
+        // Logout functionality
+        if (document.getElementById('logoutBtn')) {
+            document.getElementById('logoutBtn').addEventListener('click', function() {
+                if (window.simpleAuth) {
+                    window.simpleAuth.logout();
+                    window.location.href = '../index.html';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

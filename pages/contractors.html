@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#ff8c42">
+    <meta name="msapplication-navbutton-color" content="#ff8c42">
+    <title>پیمانکاران - سیستم مدیریت ساختمان</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/auth.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-building"></i>
+                <span>ساختمان</span>
+            </div>
+            
+            <!-- User Profile Section -->
+            <div class="user-profile" id="userProfile" style="display: none;">
+                <div class="user-info">
+                    <img src="../images/default-avatar.svg" alt="عکس پروفایل" class="user-avatar" id="userAvatar">
+                    <span class="user-name" id="userName">نام کاربر</span>
+                </div>
+                <button class="logout-btn" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>خروج</span>
+                </button>
+            </div>
+            
+            <!-- Auth Button -->
+            <div class="auth-section" id="authSection">
+                <button id="authBtn" class="auth-btn">
+                    <i class="fas fa-user"></i>
+                    <span id="authText">ورود</span>
+                </button>
+            </div>
+            
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li><a href="../index.html" class="nav-link"><i class="fas fa-home"></i></a></li>
+                    <li><a href="users.html" class="nav-link"><i class="fas fa-users"></i></a></li>
+                    <li><a href="#" class="nav-link active"><i class="fas fa-hard-hat"></i></a></li>
+                    <li><a href="providers.html" class="nav-link"><i class="fas fa-handshake"></i></a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <div class="page-header">
+                <button class="back-btn" onclick="goBack()">
+                    <i class="fas fa-arrow-right"></i>
+                    <span>بازگشت</span>
+                </button>
+                <h1 class="page-title">خدمات پیمانکاران</h1>
+            </div>
+            
+            <p class="page-subtitle">گزارش، برآورد، پروژه‌های جدید و در حال اجرا</p>
+            
+            <!-- Contractors Services Grid -->
+            <div class="menu-grid">
+                <div class="menu-item contractor-service" data-service="ai">
+                    <div class="menu-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3 class="menu-title">دستیار هوشمند</h3>
+                    <p class="menu-description">چت تخصصی، تبدیل ویس، تحلیل تصویر</p>
+                </div>
+
+                <div class="menu-item contractor-service" data-service="quick-quote">
+                    <div class="menu-icon">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                    </div>
+                    <h3 class="menu-title">بازدید و قیمت‌گذاری سریع</h3>
+                    <p class="menu-description">عکس/ویدیو، اندازه‌برداری، نقشه، چک‌لیست، PDF</p>
+                </div>
+                <div class="menu-item contractor-service" data-service="reports">
+                    <div class="menu-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="menu-title">گزارش‌ها</h3>
+                    <p class="menu-description">گزارش‌های مالی و پیشرفت پروژه</p>
+                    <div class="menu-stats">
+                        <span class="stat-item">
+                            <i class="fas fa-chart-bar"></i>
+                            <span id="reportsCount">0</span>
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="menu-item contractor-service" data-service="estimates">
+                    <div class="menu-icon">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <h3 class="menu-title">برآورد پروژه</h3>
+                    <p class="menu-description">محاسبه هزینه و زمان پروژه</p>
+                    <div class="menu-stats">
+                        <span class="stat-item">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                            <span id="estimatesCount">0</span>
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="menu-item contractor-service" data-service="projects">
+                    <div class="menu-icon">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <h3 class="menu-title">مدیریت پروژه</h3>
+                    <p class="menu-description">پروژه‌های جدید و در حال اجرا</p>
+                    <div class="menu-stats">
+                        <span class="stat-item">
+                            <i class="fas fa-tasks"></i>
+                            <span id="projectsCount">0</span>
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="menu-item contractor-service" data-service="finances">
+                    <div class="menu-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <h3 class="menu-title">مدیریت مالی</h3>
+                    <p class="menu-description">کنترل هزینه‌ها و درآمدها</p>
+                    <div class="menu-stats">
+                        <span class="stat-item">
+                            <i class="fas fa-wallet"></i>
+                            <span id="financesCount">0</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Add New Service Button -->
+            <div class="action-buttons">
+                <button class="add-btn" onclick="showAddServiceForm()">
+                    <i class="fas fa-plus"></i>
+                    <span>افزودن سرویس جدید</span>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 سیستم مدیریت ساختمان</p>
+    </footer>
+
+    <!-- Auth Modal -->
+    <div id="authModal" class="auth-modal">
+        <div class="auth-content">
+            <div class="auth-header">
+                <h2 id="authTitle">ورود به سیستم</h2>
+                <button class="close-btn" id="closeAuth">&times;</button>
+            </div>
+            
+            <!-- Login Form -->
+            <form id="loginForm" class="auth-form">
+                <div class="form-group">
+                    <label for="loginEmail">ایمیل:</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">رمز عبور:</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit" class="auth-submit">ورود</button>
+                
+                <!-- Google Sign-In Button -->
+                <div class="social-login">
+                    <div class="divider">
+                        <span>یا</span>
+                    </div>
+                    <button type="button" id="googleSignIn" class="google-signin-btn">
+                        <i class="fab fa-google"></i>
+                        <span>ورود با Google</span>
+                    </button>
+                </div>
+                
+                <p class="auth-switch">
+                    حساب کاربری ندارید؟ 
+                    <a href="#" id="showRegister">ثبت‌نام کنید</a>
+                </p>
+            </form>
+            
+            <!-- Register Form -->
+            <form id="registerForm" class="auth-form" style="display: none;">
+                <div class="form-group">
+                    <label for="registerName">نام کامل:</label>
+                    <input type="text" id="registerName" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">ایمیل:</label>
+                    <input type="email" id="registerEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPhone">شماره تلفن:</label>
+                    <input type="tel" id="registerPhone" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">رمز عبور:</label>
+                    <input type="password" id="registerPassword" required>
+                </div>
+                <button type="submit" class="auth-submit">ثبت‌نام</button>
+                
+                <!-- Google Sign-In Button -->
+                <div class="social-login">
+                    <div class="divider">
+                        <span>یا</span>
+                    </div>
+                    <button type="button" id="googleSignInRegister" class="google-signin-btn">
+                        <i class="fab fa-google"></i>
+                        <span>ثبت‌نام با Google</span>
+                    </button>
+                </div>
+                
+                <p class="auth-switch">
+                    قبلاً ثبت‌نام کرده‌اید؟ 
+                    <a href="#" id="showLogin">ورود کنید</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Service Modal -->
+    <div id="addServiceModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>افزودن سرویس جدید</h2>
+                <button class="close-btn" onclick="closeAddServiceModal()">&times;</button>
+            </div>
+            <form id="addServiceForm" class="modal-form">
+                <div class="form-group">
+                    <label for="serviceName">نام سرویس:</label>
+                    <input type="text" id="serviceName" required>
+                </div>
+                <div class="form-group">
+                    <label for="serviceType">نوع سرویس:</label>
+                    <select id="serviceType" required>
+                        <option value="">انتخاب کنید</option>
+                        <option value="reports">گزارش</option>
+                        <option value="estimates">برآورد</option>
+                        <option value="projects">پروژه</option>
+                        <option value="finances">مالی</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="serviceDescription">توضیحات:</label>
+                    <textarea id="serviceDescription" placeholder="توضیحات سرویس را وارد کنید"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="serviceCost">هزینه (تومان):</label>
+                    <input type="number" id="serviceCost" min="0">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeAddServiceModal()">انصراف</button>
+                    <button type="submit" class="btn-primary">افزودن</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- AI Assistant Modal -->
+    <div id="aiModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>دستیار هوشمند</h2>
+                <button class="close-btn" id="aiCloseBtn">&times;</button>
+            </div>
+            <div class="form-group" style="margin-top:8px;">
+                <label>OpenAI API Key</label>
+                <div style="display:flex;gap:.5rem;">
+                    <input type="password" id="openaiKey" placeholder="sk-..." style="flex:1;">
+                    <button id="saveKeyBtn" class="btn-primary">اتصال</button>
+                    <button id="clearKeyBtn" class="btn-secondary">حذف</button>
+                </div>
+                <small id="keyStatus" style="display:block;margin-top:.25rem;color:#6c757d;">کلید فقط روی دستگاه شما ذخیره می‌شود</small>
+            </div>
+
+            <div class="tabs" style="display:flex;gap:.5rem;margin:1rem 0;">
+                <button class="btn-secondary ai-tab" data-tab="chat">چت</button>
+                <button class="btn-secondary ai-tab" data-tab="voice">ویس → متن</button>
+                <button class="btn-secondary ai-tab" data-tab="image">تحلیل تصویر</button>
+            </div>
+
+            <div id="aiChatTab" class="ai-tab-pane">
+                <div class="form-group">
+                    <label>مدل</label>
+                    <select id="chatModel">
+                        <option value="gpt-4o-mini" selected>gpt-4o-mini</option>
+                        <option value="gpt-4o">gpt-4o</option>
+                    </select>
+                </div>
+                <form id="chatForm" class="modal-form">
+                    <textarea id="chatInput" placeholder="سوال تخصصی خود را بنویسید..." required></textarea>
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary">ارسال</button>
+                    </div>
+                </form>
+                <div id="chatOutput" class="message" style="margin-top:8px;position:static;"></div>
+            </div>
+
+            <div id="aiVoiceTab" class="ai-tab-pane" style="display:none;">
+                <div class="form-group">
+                    <label>تبدیل گفتار به متن</label>
+                    <div style="display:flex;gap:.5rem;">
+                        <button id="recBtn" class="btn-primary"><i class="fas fa-microphone"></i> ضبط</button>
+                        <select id="sttModel">
+                            <option value="whisper-1">whisper-1</option>
+                            <option value="gpt-4o-transcribe">gpt-4o-transcribe</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="sttOutput" class="message" style="margin-top:8px;position:static;"></div>
+            </div>
+
+            <div id="aiImageTab" class="ai-tab-pane" style="display:none;">
+                <div class="form-group">
+                    <label>تصویر</label>
+                    <input type="file" id="imageFile" accept="image/*">
+                </div>
+                <div class="form-group">
+                    <label>راهنما/پرامپت</label>
+                    <input type="text" id="imagePrompt" placeholder="مثال: ترک دیوار، برآورد آسیب...">
+                </div>
+                <div class="form-actions">
+                    <button id="analyzeBtn" class="btn-primary">تحلیل</button>
+                </div>
+                <div id="imageOutput" class="message" style="margin-top:8px;position:static;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Quote Wizard Modal -->
+    <div id="quoteModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>بازدید و قیمت‌گذاری</h2>
+                <button class="close-btn" id="quoteCloseBtn">&times;</button>
+            </div>
+            <div class="wizard-steps" style="display:flex;gap:.5rem;margin:.5rem 0;">
+                <span class="step-badge" data-step="1">۱</span>
+                <span class="step-badge" data-step="2">۲</span>
+                <span class="step-badge" data-step="3">۳</span>
+                <span class="step-badge" data-step="4">۴</span>
+                <span class="step-badge" data-step="5">۵</span>
+                <span class="step-badge" data-step="6">۶</span>
+            </div>
+            <div id="step1" class="wizard-step">
+                <div class="form-group"><label>منبع</label>
+                    <select id="leadSource">
+                        <option>MyBuilder</option><option>Checkatrade</option><option>Bark</option><option>MyJobQuote</option><option>سایر</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>کد پیشنهاد/ارجاع</label><input id="leadCode" placeholder="مثال: MB-12345"></div>
+                <div class="form-group"><label>کارفرما</label><input id="clientName"></div>
+                <div class="form-group"><label>تلفن</label><input id="clientPhone" inputmode="tel"></div>
+                <div class="form-group"><label>نشانی</label><input id="siteAddress"></div>
+                <div class="form-group"><label>شرح اولیه</label><textarea id="brief"></textarea></div>
+            </div>
+            <div id="step2" class="wizard-step" style="display:none;">
+                <div class="form-group"><label>عکس‌ها (دوربین پشت)</label>
+                    <input type="file" id="photos" accept="image/*" capture="environment" multiple>
+                </div>
+                <div class="form-group"><label>ویدیو</label>
+                    <input type="file" id="videos" accept="video/*" capture="environment" multiple>
+                </div>
+                <div class="form-group"><label>نقشه‌ها (DWG/JPG/PNG/PDF)</label>
+                    <input type="file" id="drawings" accept=".dwg,.pdf,image/*" multiple>
+                </div>
+                <div id="mediaPreview" class="message" style="margin-top:.5rem;position:static;"></div>
+            </div>
+            <div id="step3" class="wizard-step" style="display:none;">
+                <div id="measureList"></div>
+                <button id="addMeasure" class="btn-secondary">افزودن فضا/اتاق</button>
+                <div class="message" style="margin-top:.5rem;position:static;">مساحت و حجم به‌صورت خودکار محاسبه می‌شود.</div>
+            </div>
+            <div id="step4" class="wizard-step" style="display:none;">
+                <div class="form-group"><label>چک‌لیست کارها</label>
+                    <div id="checklistContainer"></div>
+                </div>
+            </div>
+            <div id="step5" class="wizard-step" style="display:none;">
+                <div class="form-group" style="display:flex;gap:.5rem;align-items:center;">
+                    <button id="aiSuggestBtn" class="btn-primary"><i class="fas fa-magic"></i> پیشنهاد AI</button>
+                    <small>در صورت نبود کلید، از کاتالوگ داخلی استفاده می‌شود.</small>
+                </div>
+                <div id="boqTable"></div>
+                <div class="form-group" style="text-align:left">
+                    <strong>جمع کل: </strong><span id="grandTotal">0</span> تومان
+                </div>
+            </div>
+            <div id="step6" class="wizard-step" style="display:none;">
+                <div class="form-group"><label>شرایط و توضیحات</label><textarea id="terms" placeholder="شرایط پرداخت، دامنه کار، مدت اعتبار پیشنهاد..."></textarea></div>
+                <button id="generatePdf" class="btn-primary"><i class="fas fa-file-pdf"></i> ساخت PDF</button>
+                <div id="pdfStatus" class="message" style="margin-top:.5rem;position:static;"></div>
+            </div>
+            <div class="form-actions" style="justify-content:space-between;margin-top:1rem;">
+                <button id="prevStep" class="btn-secondary">قبلی</button>
+                <button id="nextStep" class="btn-primary">بعدی</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vendor and feature scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/contractors.js"></script>
+    <script src="../js/ai-addon.js"></script>
+    <script src="../js/catalog.js"></script>
+    <script src="../js/quote-wizard.js"></script>
+</body>
+</html>
