@@ -24,7 +24,15 @@
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.7",
     "typescript": "5.5.3"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zoroman1313/jobbaazar.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zoroman1313/jobbaazar/issues"
+  },
+  "homepage": "https://github.com/zoroman1313/jobbaazar#readme"
 }
 
 
