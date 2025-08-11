@@ -8,6 +8,7 @@ export default function ExpenseForm(){
   async function onSubmit(formData: FormData){
     setLoading(true); setMessage('')
     const payload = {
+      userId: 'demo-user',
       category: String(formData.get('category')||'Material'),
       vendor: String(formData.get('vendor')||''),
       amount: Number(formData.get('amount')||0),

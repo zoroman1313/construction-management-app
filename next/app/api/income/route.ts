@@ -3,19 +3,17 @@ import { dbConnect } from '@/lib/db/mongoose'
 import Income from '@/lib/models/Income'
 import { z } from 'zod'
 
-export const runtime = 'nodejs'
-export const dynamic = 'force-dynamic'
-
 const schema = z.object({
-  payerName: z.string().min(1),
-  method: z.enum(['Cash', 'BankTransfer']),
-  bank: z.string().optional().nullable(),
+  userId: z.string(),
+  projectId: z.string().nullable().optional(),
+  payerName: z.string(),
+  method: z.enum(['Cash','BankTransfer']),
+  bank: z.string().nullable().optional(),
   amount: z.number().positive(),
   currency: z.string().default('GBP'),
-  accountTarget: z.string().optional().default(''),
-  receivedAt: z.string().min(1),
-  projectId: z.string().optional().nullable(),
-  note: z.string().optional().default(''),
+  accountTarget: z.string().optional(),
+  receivedAt: z.coerce.date(),
+  note: z.string().optional()
 })
 
 export async function GET() {
@@ -25,12 +23,12 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
-  const json = await req.json().catch(()=>null)
-  const parsed = schema.safeParse(json)
-  if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 })
   await dbConnect()
-  const created = await Income.create({ ...parsed.data, userId: 'demo-user' })
-  return NextResponse.json(created)
+  const body = await req.json()
+  const parsed = schema.safeParse(body)
+  if (!parsed.success) return NextResponse.json({ error: parsed.error.format() }, { status: 400 })
+  const doc = await Income.create(parsed.data)
+  return NextResponse.json(doc)
 }
 
 

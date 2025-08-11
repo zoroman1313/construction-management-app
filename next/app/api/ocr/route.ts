@@ -1,14 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
-import localParser from '@/lib/ocr/parserLocal'
-
-export const runtime = 'nodejs'
-export const dynamic = 'force-dynamic'
+import { ReceiptParseRequest } from '@/lib/ocr/contracts'
+import parserLocal, { parserLocal as parserAlias } from '@/lib/ocr/parserLocal'
 
 export async function POST(req: NextRequest) {
-  const body = await req.json().catch(()=>null)
-  if (!body?.fileUrl) return NextResponse.json({ error: 'fileUrl required' }, { status: 400 })
-  const result = await localParser.parse({ fileUrl: body.fileUrl, projectId: body.projectId || null, locale: body.locale || 'en' })
-  return NextResponse.json(result)
+  const body = (await req.json()) as ReceiptParseRequest
+  try {
+    // support default export or named as per spec
+    const parser = (parserAlias || parserLocal) as any
+    const result = await parser.parse(body)
+    return NextResponse.json(result)
+  } catch (e:any) {
+    return NextResponse.json({ error: e?.message || 'parse failed' }, { status: 500 })
+  }
 }
 
 

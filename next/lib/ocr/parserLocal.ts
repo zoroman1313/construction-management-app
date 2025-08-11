@@ -1,49 +1,118 @@
-import Tesseract from 'tesseract.js'
 import { IReceiptParser, ReceiptParseRequest, ReceiptParseResult } from './contracts'
-import { parseAmount } from '@/lib/utils/date'
+import { parseAmount } from '@/lib/utils/money'
+import * as screwfix from './vendors/screwfix'
+import * as bq from './vendors/bq'
+import * as toolstation from './vendors/toolstation'
 
-// Simple local parser using regex heuristics. Vendor-specific modules can refine.
-export class LocalReceiptParser implements IReceiptParser {
-  async parse(req: ReceiptParseRequest): Promise<ReceiptParseResult> {
-    const { fileUrl } = req
-    const ocr = await Tesseract.recognize(fileUrl, req.locale === 'fa' ? 'fas' : 'eng')
-    const raw = ocr.data?.text || ''
+const KNOWN_VENDORS = ['Screwfix','B&Q','Toolstation','Wickes','Builders Depot']
 
-    // Heuristics
-    const dateMatch = raw.match(/(\d{1,2}[\/.-]\d{1,2}[\/.-]\d{2,4}|\d{4}-\d{2}-\d{2})/)
-    const totalMatch = raw.match(/total\s*[:=]?\s*([£$€]?\s*[-+]?[0-9.,]+)/i)
-    const vatMatch = raw.match(/vat\s*[:=]?\s*([£$€]?\s*[-+]?[0-9.,]+)/i)
-    const discountMatch = raw.match(/discount\s*[:=]?\s*([£$€]?\s*[-+]?[0-9.,]+)/i)
-    const pmCard = /\b(card|visa|mastercard|debit|credit)\b/i.test(raw)
-    const pmCash = /\b(cash)\b/i.test(raw)
-    const pmBank = /\b(bank\s*transfer|iban|sort\s*code)\b/i.test(raw)
-    const currency = /£/.test(raw) ? 'GBP' : /€/.test(raw) ? 'EUR' : /\$/.test(raw) ? 'USD' : undefined
-
-    const res: ReceiptParseResult = {
-      vendor: guessVendor(raw),
-      date: dateMatch?.[1],
-      total: parseAmount(totalMatch?.[1] || ''),
-      tax_vat: parseAmount(vatMatch?.[1] || ''),
-      discount: parseAmount(discountMatch?.[1] || ''),
-      payment_method: pmCard ? 'Card' : pmCash ? 'Cash' : pmBank ? 'BankTransfer' : 'Unknown',
-      currency,
-      line_items: undefined,
-      confidence: ocr.data?.confidence || 0,
-      raw_text: raw,
-      image_url: fileUrl,
-      meta: {}
-    }
-    return res
+function detectVendor(text: string): string | undefined {
+  const t = text.toLowerCase()
+  if (screwfix.isVendor(text)) return 'Screwfix'
+  if (bq.isVendor(text)) return 'B&Q'
+  if (toolstation.isVendor(text)) return 'Toolstation'
+  for (const v of KNOWN_VENDORS) {
+    if (t.includes(v.toLowerCase().replace('&','&'))) return v
   }
 }
 
-function guessVendor(raw: string){
-  if (/screwfix/i.test(raw)) return 'Screwfix'
-  if (/toolstation/i.test(raw)) return 'Toolstation'
-  if (/b\s*q/i.test(raw)) return 'B&Q'
-  return undefined
+function extractDate(text: string): string | undefined {
+  const patterns = [
+    /\b(\d{2})[\/\-\.](\d{2})[\/\-\.](\d{4})\b/,
+    /\b(\d{4})[\/\-\.](\d{2})[\/\-\.](\d{2})\b/,
+  ]
+  for (const r of patterns) {
+    const m = text.match(r)
+    if (m) {
+      if (r === patterns[0]) {
+        const [_all, dd, mm, yyyy] = m
+        return `${yyyy}-${mm}-${dd}`
+      } else {
+        const [full] = m
+        return full.replace(/[\.]/g, '-')
+      }
+    }
+  }
 }
 
-export default new LocalReceiptParser()
+function extractPayment(text: string): { method: 'Cash'|'Card'|'BankTransfer'|'Unknown'; bank?: string|null } {
+  const T = text.toUpperCase()
+  if (T.includes('CASH')) return { method: 'Cash' }
+  if (T.includes('TRANSFER') || T.includes('BANK TRANSFER')) return { method: 'BankTransfer' }
+  if (T.includes('CARD') || T.includes('VISA') || T.includes('MASTERCARD')) return { method: 'Card' }
+  return { method: 'Unknown' }
+}
+
+function extractTotalsGeneric(text: string){
+  const lines = text.split(/\r?\n/)
+  let total: number|undefined, vat: number|undefined, discount: number|undefined
+  for (const ln of lines) {
+    if (/vat|tax/i.test(ln)) vat ??= parseAmount(ln)
+    if (/discount|promo|off/i.test(ln)) discount ??= parseAmount(ln)
+    if (/total|amount due|grand total|balance/i.test(ln)) {
+      const n = parseAmount(ln)
+      if (n !== undefined) total = total ? Math.max(total, n) : n
+    }
+  }
+  return { total, tax_vat: vat, discount }
+}
+
+export const parserLocal: IReceiptParser = {
+  async parse(req: ReceiptParseRequest): Promise<ReceiptParseResult> {
+    const image_url = req.fileUrl
+    let raw_text = ''
+    let vendor: string | undefined = undefined
+
+    // Allow client to pass raw_text in future; otherwise keep minimal
+    const maybeRaw: unknown = (req as any).raw_text
+    if (typeof maybeRaw === 'string' && maybeRaw.length > 10) {
+      raw_text = maybeRaw
+      vendor = detectVendor(raw_text)
+      const date = extractDate(raw_text)
+      const payment = extractPayment(raw_text)
+
+      let line_items: any[] = []
+      let totals = extractTotalsGeneric(raw_text)
+      if (vendor === 'Screwfix') {
+        totals = { ...totals, ...screwfix.extractTotals(raw_text) }
+        line_items = screwfix.extractLineItems(raw_text)
+      } else if (vendor === 'B&Q') {
+        totals = { ...totals, ...bq.extractTotals(raw_text) }
+        line_items = bq.extractLineItems(raw_text)
+      } else if (vendor === 'Toolstation') {
+        totals = { ...totals, ...toolstation.extractTotals(raw_text) }
+        line_items = toolstation.extractLineItems(raw_text)
+      }
+
+      const matched = ['vendor','date','total','payment'].filter(Boolean).length
+      const confidence = Math.min(1, 0.4 + matched * 0.15)
+
+      return {
+        vendor,
+        date,
+        total: totals.total,
+        tax_vat: totals.tax_vat,
+        discount: totals.discount,
+        payment_method: payment.method,
+        bank: payment.bank ?? null,
+        currency: 'GBP',
+        line_items,
+        confidence,
+        raw_text,
+        image_url,
+      }
+    }
+
+    return {
+      vendor,
+      currency: 'GBP',
+      confidence: 0.2,
+      raw_text,
+      image_url,
+    }
+  },
+}
+
+export default parserLocal
 
 

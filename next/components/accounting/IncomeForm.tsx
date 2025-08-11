@@ -8,6 +8,7 @@ export default function IncomeForm(){
   async function onSubmit(formData: FormData){
     setLoading(true); setMessage('')
     const payload = {
+      userId: 'demo-user',
       payerName: String(formData.get('payerName')||''),
       method: String(formData.get('method')||'Cash') as 'Cash'|'BankTransfer',
       bank: String(formData.get('bank')||'')||null,

@@ -3,26 +3,30 @@ import { dbConnect } from '@/lib/db/mongoose'
 import Expense from '@/lib/models/Expense'
 import { z } from 'zod'
 
-export const runtime = 'nodejs'
-export const dynamic = 'force-dynamic'
+const item = z.object({
+  name: z.string(),
+  qty: z.number().optional(),
+  unit_price: z.number().optional(),
+  total: z.number().optional()
+})
 
-const lineItem = z.object({ name: z.string(), qty: z.number().optional(), unit_price: z.number().optional(), total: z.number().optional() })
 const schema = z.object({
-  projectId: z.string().optional().nullable(),
+  userId: z.string(),
+  projectId: z.string().nullable().optional(),
   category: z.enum(['InitialVisit','Fuel','Food','Material','Transport','Labor','Management','Misc']),
-  vendor: z.string().optional().default(''),
-  amount: z.number().positive(),
-  currency: z.string().optional().default('GBP'),
-  paymentMethod: z.enum(['Cash','Card','BankTransfer','Unknown']).optional().default('Unknown'),
-  bank: z.string().optional().nullable(),
-  vat: z.number().optional().default(0),
-  discount: z.number().optional().default(0),
-  items: z.array(lineItem).optional().default([]),
-  expenseAt: z.string(),
-  receiptImageUrl: z.string().optional().default(''),
-  rawText: z.string().optional().default(''),
-  confidence: z.number().optional().default(0),
-  note: z.string().optional().default('')
+  vendor: z.string().optional(),
+  amount: z.number().nonnegative(),
+  currency: z.string().default('GBP'),
+  paymentMethod: z.enum(['Cash','Card','BankTransfer','Unknown']).default('Unknown'),
+  bank: z.string().nullable().optional(),
+  vat: z.number().nonnegative().default(0),
+  discount: z.number().nonnegative().default(0),
+  items: z.array(item).optional(),
+  expenseAt: z.coerce.date(),
+  receiptImageUrl: z.string().optional(),
+  rawText: z.string().optional(),
+  confidence: z.number().min(0).max(1).optional(),
+  note: z.string().optional()
 })
 
 export async function GET() {
@@ -32,12 +36,12 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
-  const json = await req.json().catch(()=>null)
-  const parsed = schema.safeParse(json)
-  if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 })
   await dbConnect()
-  const created = await Expense.create({ ...parsed.data, userId: 'demo-user' })
-  return NextResponse.json(created)
+  const body = await req.json()
+  const parsed = schema.safeParse(body)
+  if (!parsed.success) return NextResponse.json({ error: parsed.error.format() }, { status: 400 })
+  const doc = await Expense.create(parsed.data)
+  return NextResponse.json(doc)
 }
 
 
