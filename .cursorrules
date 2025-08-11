@@ -1,0 +1,4 @@
+# Global rules
+Always respond in ENGLISH. If the user prompt is not English (e.g., Persian),
+translate it to English first, then proceed in English only.
+All UI copy, comments, and docs must be in English by default.

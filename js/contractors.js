@@ -108,6 +108,7 @@ class ContractorsManager {
     }
 
     showServiceDetails(serviceType) {
+        this.currentService = serviceType;
         const services = this.services.filter(s => s.type === serviceType);
         this.createServicePage(serviceType, services);
     }
@@ -137,7 +138,7 @@ class ContractorsManager {
                     <div class="stat-label">Total ${serviceNames[serviceType]}</div>
                 </div>
                 <div class="stat-card">
-                    <i class="fas fa-dollar-sign"></i>
+                    <i class="fas fa-sterling-sign"></i>
                     <div class="stat-number">${this.formatCurrency(this.calculateTotalCost(services))}</div>
                     <div class="stat-label">Total cost</div>
                 </div>
@@ -176,7 +177,7 @@ class ContractorsManager {
                     <p>${service.description}</p>
                     <div class="service-details">
                         <span class="service-cost">
-                            <i class="fas fa-dollar-sign"></i>
+                            <i class="fas fa-sterling-sign"></i>
                             ${this.formatCurrency(service.cost)}
                         </span>
                     </div>
@@ -275,7 +276,7 @@ class ContractorsManager {
     }
 
     formatCurrency(amount) {
-        return new Intl.NumberFormat('en-GB').format(amount);
+        return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(amount);
     }
 
     formatDate(dateString) {
@@ -315,6 +316,14 @@ function deleteService(serviceId) { if (window.contractorsManager) { window.cont
 
 document.addEventListener('DOMContentLoaded', function() {
     window.contractorsManager = new ContractorsManager();
+    // Apply deep-link view if present
+    try {
+        const url = new URL(window.location.href);
+        const viewParam = url.searchParams.get('view') || (url.hash.includes('view=') ? new URLSearchParams(url.hash.slice(1)).get('view') : null);
+        if (viewParam) {
+            window.contractorsManager.showServiceDetails(viewParam);
+        }
+    } catch(e) {}
 });
 
 console.log('🏗️ Contractors management system loaded!');

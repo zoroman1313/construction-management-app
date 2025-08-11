@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en-GB" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Accounting</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/auth.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta name="theme-color" content="#ff8c42">
+  <meta name="msapplication-navbutton-color" content="#ff8c42">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="mobile-web-app-capable" content="yes">
+  <style>
+    .card { background:#fff;border:1px solid #eee;border-radius:12px;padding:1rem; }
+  </style>
+  </head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <div class="logo"><i class="fas fa-building"></i><span>Building</span></div>
+      <nav class="nav">
+        <ul class="nav-list">
+          <li><a href="../index.html" class="nav-link"><i class="fas fa-home"></i></a></li>
+          <li><a href="users.html" class="nav-link"><i class="fas fa-users"></i></a></li>
+          <li><a href="contractors.html" class="nav-link"><i class="fas fa-hard-hat"></i></a></li>
+          <li><a href="providers.html" class="nav-link"><i class="fas fa-handshake"></i></a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="container">
+      <div class="page-header">
+        <button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i><span>Back</span></button>
+        <h1 class="page-title">Accounting</h1>
+      </div>
+      <p id="contextLabel" class="page-subtitle"></p>
+
+      <div class="card" style="margin-bottom:1rem;">
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;justify-content:space-between;">
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+            <button class="btn-secondary" data-tab="expenses">Expenses</button>
+            <button class="btn-secondary" data-tab="invoices">Invoices</button>
+            <button class="btn-secondary" data-tab="payments">Payments</button>
+            <button class="btn-secondary" data-tab="summary">Summary</button>
+          </div>
+          <div style="display:flex;gap:.5rem;align-items:center;">
+            <label style="font-weight:600;">Context</label>
+            <select id="accCtxSelect">
+              <option value="auto">Auto (from page)</option>
+              <option value="all">All</option>
+              <option value="contractors">Contractors</option>
+              <option value="projects:ongoing">Projects / Ongoing</option>
+              <option value="projects:finished">Projects / Finished</option>
+              <option value="projects:estimate">Projects / Estimate</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <section id="tab-expenses" class="card acc-tab" style="display:block;">
+        <h3 style="margin-bottom:.75rem;">Expenses</h3>
+        <form id="expenseForm" class="modal-form" style="margin-bottom:1rem;">
+          <div class="form-group"><label>Title</label><input id="expTitle" required></div>
+          <div class="form-group"><label>Category</label>
+            <select id="expCategory">
+              <option>Materials</option>
+              <option>Labour</option>
+              <option>Transport</option>
+              <option>Tools</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Amount (£)</label><input id="expAmount" type="number" min="0" step="0.01" required></div>
+          <div class="form-group"><label>Date</label><input id="expDate" type="date" required></div>
+          <div class="form-group"><label>Notes</label><textarea id="expNotes"></textarea></div>
+          <div class="form-actions"><button class="btn-primary" type="submit">Add expense</button></div>
+        </form>
+
+        <div class="card" data-feature="ai-cost" style="margin-bottom:1rem;">
+          <div class="form-group">
+            <label>Receipt/Invoice image</label>
+            <input id="expImageFile" type="file" accept="image/*">
+          </div>
+          <div class="form-actions">
+            <button class="btn-primary" data-ai-extract>Extract cost with AI</button>
+          </div>
+          <div class="message" data-ai-cost-output style="position:static;margin-top:.5rem;"></div>
+        </div>
+
+        <div id="expensesTableWrap"></div>
+      </section>
+
+      <section id="tab-invoices" class="card acc-tab" style="display:none;">
+        <h3 style="margin-bottom:.75rem;">Invoices</h3>
+        <form id="invoiceForm" class="modal-form" style="margin-bottom:1rem;">
+          <div class="form-group"><label>Invoice No.</label><input id="invNumber" required></div>
+          <div class="form-group"><label>Client/Supplier</label><input id="invParty" required></div>
+          <div class="form-group"><label>Amount (£)</label><input id="invAmount" type="number" min="0" step="0.01" required></div>
+          <div class="form-group"><label>Issue date</label><input id="invDate" type="date" required></div>
+          <div class="form-group"><label>Status</label>
+            <select id="invStatus"><option>Unpaid</option><option>Paid</option><option>Partially paid</option></select>
+          </div>
+          <div class="form-actions"><button class="btn-primary" type="submit">Add invoice</button></div>
+        </form>
+        <div id="invoicesTableWrap"></div>
+      </section>
+
+      <section id="tab-payments" class="card acc-tab" style="display:none;">
+        <h3 style="margin-bottom:.75rem;">Payments</h3>
+        <form id="paymentForm" class="modal-form" style="margin-bottom:1rem;">
+          <div class="form-group"><label>Reference</label><input id="payRef" required></div>
+          <div class="form-group"><label>Type</label><select id="payType"><option>Incoming</option><option>Outgoing</option></select></div>
+          <div class="form-group"><label>Amount (£)</label><input id="payAmount" type="number" min="0" step="0.01" required></div>
+          <div class="form-group"><label>Date</label><input id="payDate" type="date" required></div>
+          <div class="form-actions"><button class="btn-primary" type="submit">Add payment</button></div>
+        </form>
+        <div id="paymentsTableWrap"></div>
+      </section>
+
+      <section id="tab-summary" class="card acc-tab" style="display:none;">
+        <h3 style="margin-bottom:.75rem;">Summary</h3>
+        <div id="summaryStats"></div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer"><p>&copy; 2024 Construction Management System</p></footer>
+
+  <script src="../js/auth.js"></script>
+  <script src="../js/modules.js"></script>
+  <script src="../js/features.js"></script>
+  <script src="../js/ai-addon.js"></script>
+  <script src="../js/accounting.js"></script>
+  <script>
+    function goBack(){ window.history.back(); }
+    document.addEventListener('DOMContentLoaded', function(){
+      const ctx = (window.Modules && Modules.getContext()) || {};
+      let label = '';
+      if (ctx.ctx === 'contractors') {
+        label = 'Contractors';
+      } else if (ctx.ctx === 'projects') {
+        if (ctx.status === 'finished') label = 'Projects / Finished';
+        else if (ctx.status === 'ongoing') label = 'Projects / Ongoing';
+        else if (ctx.tab === 'estimate') label = 'Projects / Estimate';
+        else label = 'Projects';
+      } else { label = 'Overview'; }
+      const el = document.getElementById('contextLabel'); if (el) el.textContent = label;
+      if (window.Features) Features.init(document);
+    });
+  </script>
+</body>
+</html>
+
+

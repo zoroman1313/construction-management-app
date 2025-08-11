@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en-GB" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -68,85 +68,30 @@
             
             <!-- Contractors Services Grid -->
             <div class="menu-grid">
-                <div class="menu-item contractor-service" data-service="ai">
-                    <div class="menu-icon">
-                        <i class="fas fa-robot"></i>
-                    </div>
-                    <h3 class="menu-title">AI Assistant</h3>
-                    <p class="menu-description">Expert chat, speech-to-text, image analysis</p>
-                </div>
-
-                <div class="menu-item contractor-service" data-service="quick-quote">
-                    <div class="menu-icon">
-                        <i class="fas fa-file-invoice-dollar"></i>
-                    </div>
-                    <h3 class="menu-title">Quick Site Visit & Quote</h3>
-                    <p class="menu-description">Photos/Videos, measurements, drawings, checklists, PDF</p>
-                </div>
-                <div class="menu-item contractor-service" data-service="reports">
-                    <div class="menu-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h3 class="menu-title">Reports</h3>
-                    <p class="menu-description">Financial and progress reports</p>
-                    <div class="menu-stats">
-                        <span class="stat-item">
-                            <i class="fas fa-chart-bar"></i>
-                            <span id="reportsCount">0</span>
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="menu-item contractor-service" data-service="estimates">
-                    <div class="menu-icon">
-                        <i class="fas fa-calculator"></i>
-                    </div>
-                    <h3 class="menu-title">Project Estimate</h3>
-                    <p class="menu-description">Cost and time calculation</p>
-                    <div class="menu-stats">
-                        <span class="stat-item">
-                            <i class="fas fa-file-invoice-dollar"></i>
-                            <span id="estimatesCount">0</span>
-                        </span>
-                    </div>
-                </div>
-                
                 <div class="menu-item contractor-service" data-service="projects">
-                    <div class="menu-icon">
-                        <i class="fas fa-project-diagram"></i>
-                    </div>
-                    <h3 class="menu-title">Project Management</h3>
-                    <p class="menu-description">New and ongoing projects</p>
-                    <div class="menu-stats">
-                        <span class="stat-item">
-                            <i class="fas fa-tasks"></i>
-                            <span id="projectsCount">0</span>
-                        </span>
-                    </div>
+                    <div class="menu-icon"><i class="fas fa-project-diagram"></i></div>
+                    <h3 class="menu-title">Projects</h3>
+                    <p class="menu-description">Completed • Ongoing • Estimated</p>
                 </div>
-                
-                <div class="menu-item contractor-service" data-service="finances">
-                    <div class="menu-icon">
-                        <i class="fas fa-dollar-sign"></i>
-                    </div>
-                    <h3 class="menu-title">Financial Management</h3>
-                    <p class="menu-description">Control costs and incomes</p>
-                    <div class="menu-stats">
-                        <span class="stat-item">
-                            <i class="fas fa-wallet"></i>
-                            <span id="financesCount">0</span>
-                        </span>
-                    </div>
+                <div class="menu-item contractor-service" data-service="quick-quote">
+                    <div class="menu-icon"><i class="fas fa-file-invoice-dollar"></i></div>
+                    <h3 class="menu-title">Quick quote</h3>
+                    <p class="menu-description">Rapid site visit, photos/videos, measurements, PDF</p>
+                </div>
+                <div class="menu-item contractor-service" data-service="gallery">
+                    <div class="menu-icon"><i class="fas fa-images"></i></div>
+                    <h3 class="menu-title">Gallery</h3>
+                    <p class="menu-description">Manage project photos and videos</p>
+                </div>
+                <div class="menu-item contractor-service" data-service="accounting">
+                    <div class="menu-icon"><i class="fas fa-calculator"></i></div>
+                    <h3 class="menu-title">Accounting</h3>
+                    <p class="menu-description">Costs, incomes, financial reports</p>
                 </div>
             </div>
             
-            <!-- Add New Service Button -->
-            <div class="action-buttons">
-                <button class="add-btn" onclick="showAddServiceForm()">
-                    <i class="fas fa-plus"></i>
-                    <span>Add new service</span>
-                </button>
-            </div>
+            <h2 class="page-subtitle" style="margin-top:1rem;">Shortcuts</h2>
+            <div id="modulesContractors" class="menu-grid"></div>
         </div>
     </main>
 
@@ -258,7 +203,7 @@
                     <textarea id="serviceDescription" placeholder="Enter service description"></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="serviceCost">Cost (Toman):</label>
+                    <label for="serviceCost">Cost (£):</label>
                     <input type="number" id="serviceCost" min="0">
                 </div>
                 <div class="form-actions">
@@ -399,11 +344,11 @@
             <div id="step5" class="wizard-step" style="display:none;">
                 <div class="form-group" style="display:flex;gap:.5rem;align-items:center;">
                     <button id="aiSuggestBtn" class="btn-primary"><i class="fas fa-magic"></i> AI suggest</button>
-                    <small>If no API key, internal catalog is used.</small>
+                    <small>If no API key, internal catalogue is used.</small>
                 </div>
                 <div id="boqTable"></div>
                     <div class="form-group" style="text-align:left">
-                    <strong>Grand total: </strong><span id="grandTotal">0</span> Toman
+                    <strong>Grand total: </strong>£<span id="grandTotal">0</span>
                 </div>
             </div>
             <div id="step6" class="wizard-step" style="display:none;">
@@ -431,10 +376,30 @@
     <script src="../js/auth.js"></script>
     <script src="../js/config.js"></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="../js/modules.js"></script>
+    <script src="../js/features.js"></script>
     <script src="../js/contractors.js"></script>
     <script src="../js/labour-rates.js"></script>
     <script src="../js/ai-addon.js"></script>
     <script src="../js/catalog.js"></script>
     <script src="../js/quote-wizard.js"></script>
+    <script src="../js/site-map.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function(){
+        if (window.Modules) {
+          Modules.renderShortcuts('#modulesContractors', [
+            { id:'accounting', title:'Accounting (Contractors)', icon:'fas fa-calculator', target:'contractors' },
+            { id:'accounting', title:'Accounting - Projects (Finished)', icon:'fas fa-file-invoice-dollar', target:'projects:finished' },
+            { id:'accounting', title:'Accounting - Projects (Ongoing)', icon:'fas fa-briefcase', target:'projects:ongoing' },
+            { id:'accounting', title:'Accounting - Projects (Estimate)', icon:'fas fa-money-check-alt', target:'projects:estimate' }
+          ]);
+        }
+        if (window.Features) Features.init();
+        // Navigation for 4 tiles
+        document.querySelector('.contractor-service[data-service="projects"]')?.addEventListener('click', ()=>{ window.location.href = 'projects.html'; });
+        document.querySelector('.contractor-service[data-service="gallery"]')?.addEventListener('click', ()=>{ window.location.href = 'gallery.html'; });
+        document.querySelector('.contractor-service[data-service="accounting"]')?.addEventListener('click', ()=>{ window.location.href = 'accounting.html?ctx=contractors'; });
+      });
+    </script>
 </body>
 </html>

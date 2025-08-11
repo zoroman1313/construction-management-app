@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en-GB" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Projects</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/auth.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta name="theme-color" content="#ff8c42">
+  <meta name="msapplication-navbutton-color" content="#ff8c42">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="mobile-web-app-capable" content="yes">
+  <style>
+    .tabs { display:flex; gap:.5rem; margin:1rem 0; }
+    .tab { padding:.5rem .75rem; border:1px solid #eee; border-radius:8px; cursor:pointer; background:#fff; }
+    .tab.active { background:#ff6b35; color:#fff; border-color:#ff6b35; }
+    .cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:.75rem; }
+    .card { background:#fff; border:1px solid #eee; border-radius:12px; padding:.75rem; }
+    .muted { color:#6c757d; font-size:12px; }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <div class="logo"><i class="fas fa-building"></i><span>Building</span></div>
+      <nav class="nav">
+        <ul class="nav-list">
+          <li><a href="../index.html" class="nav-link"><i class="fas fa-home"></i></a></li>
+          <li><a href="users.html" class="nav-link"><i class="fas fa-users"></i></a></li>
+          <li><a href="contractors.html" class="nav-link"><i class="fas fa-hard-hat"></i></a></li>
+          <li><a href="providers.html" class="nav-link"><i class="fas fa-handshake"></i></a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="container">
+      <div class="page-header">
+        <button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i><span>Back</span></button>
+        <h1 class="page-title">Projects</h1>
+      </div>
+
+      <div class="tabs">
+        <button class="tab" data-tab="ongoing">Ongoing</button>
+        <button class="tab" data-tab="finished">Finished</button>
+        <button class="tab" data-tab="estimated">Estimated</button>
+      </div>
+
+      <div id="projectsHost" class="cards"></div>
+    </div>
+  </main>
+
+  <footer class="footer"><p>&copy; 2024 Construction Management System</p></footer>
+
+  <script src="../js/auth.js"></script>
+  <script>
+    function goBack(){ window.history.back(); }
+    function loadProjects(kind) {
+      const host = document.getElementById('projectsHost'); if (!host) return; host.innerHTML = '';
+      let list = [];
+      if (kind === 'ongoing') list = JSON.parse(localStorage.getItem('active_projects')||'[]');
+      else if (kind === 'finished') list = JSON.parse(localStorage.getItem('finished_projects')||'[]');
+      else if (kind === 'estimated') list = JSON.parse(localStorage.getItem('estimated_projects')||'[]');
+      if (!list.length) {
+        host.innerHTML = '<div class="message" style="position:static;">No items found.</div>';
+        return;
+      }
+      list.forEach(p => {
+        const div = document.createElement('div'); div.className='card';
+        div.innerHTML = `
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <h3 style="margin:0;">${p.title || 'Project'}</h3>
+            <span class="muted">${new Date(p.meta?.createdAt||Date.now()).toLocaleDateString('en-GB')}</span>
+          </div>
+          <div class="muted" style="margin:.25rem 0;">${p.client?.name||''} • ${p.client?.phone||''}</div>
+          <div style="display:flex;gap:.5rem;margin-top:.5rem;">
+            <button class="btn-secondary" data-action="to-finished">Move to finished</button>
+            <button class="btn-secondary" data-action="to-ongoing">Move to ongoing</button>
+          </div>
+        `;
+        div.querySelector('[data-action="to-finished"]').addEventListener('click',()=>moveProject(p.id, 'finished'));
+        div.querySelector('[data-action="to-ongoing"]').addEventListener('click',()=>moveProject(p.id, 'ongoing'));
+        host.appendChild(div);
+      });
+    }
+    function moveProject(id, target) {
+      const active = JSON.parse(localStorage.getItem('active_projects')||'[]');
+      const finished = JSON.parse(localStorage.getItem('finished_projects')||'[]');
+      let fromArr, toArr, fromKey, toKey;
+      if (target === 'finished') { fromArr = active; toArr = finished; fromKey = 'active_projects'; toKey = 'finished_projects'; }
+      else { fromArr = finished; toArr = active; fromKey = 'finished_projects'; toKey = 'active_projects'; }
+      const idx = fromArr.findIndex(p=>p.id===id);
+      if (idx>=0) {
+        const [proj] = fromArr.splice(idx,1);
+        proj.status = (target==='finished')? 'finished':'active';
+        toArr.push(proj);
+        localStorage.setItem(fromKey, JSON.stringify(fromArr));
+        localStorage.setItem(toKey, JSON.stringify(toArr));
+        const activeTab = document.querySelector('.tab.active')?.dataset.tab || 'ongoing';
+        loadProjects(activeTab);
+      }
+    }
+    document.addEventListener('DOMContentLoaded', function(){
+      const tabs = document.querySelectorAll('.tab');
+      tabs.forEach(t=>t.addEventListener('click', (e)=>{
+        tabs.forEach(x=>x.classList.remove('active'));
+        e.currentTarget.classList.add('active');
+        loadProjects(e.currentTarget.dataset.tab);
+      }));
+      // Default tab
+      const url = new URL(window.location.href);
+      const status = url.searchParams.get('status');
+      const tab = status==='finished'? 'finished' : status==='estimated' ? 'estimated' : 'ongoing';
+      const btn = document.querySelector(`.tab[data-tab="${tab}"]`);
+      if (btn) btn.click(); else { tabs[0]?.classList.add('active'); loadProjects('ongoing'); }
+    });
+  </script>
+</body>
+</html>
+
+

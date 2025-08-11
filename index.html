@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en-GB" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -85,6 +85,8 @@
                     <p class="menu-description">Those who have jobs or materials and seek buyers/workers</p>
                 </div>
             </div>
+            <h2 class="main-subtitle" style="margin-top:1rem;">Shortcuts</h2>
+            <div id="modulesHome" class="menu-grid"></div>
         </div>
     </main>
 
@@ -164,6 +166,17 @@
     </div>
 
     <script src="js/auth.js"></script>
+    <script src="js/modules.js"></script>
+    <script src="js/features.js"></script>
     <script src="js/script.js"></script>
+    <script src="js/site-map.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function(){
+        if (window.Modules) {
+          Modules.renderTiles('#modulesHome', { section: 'home' });
+        }
+        if (window.Features) Features.init();
+      });
+    </script>
 </body>
 </html>

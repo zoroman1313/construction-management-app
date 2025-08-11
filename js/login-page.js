@@ -371,6 +371,19 @@ class LoginPageManager {
                 subtitle.textContent = `Please sign in to access the ${destinationName} section`;
             }
         }
+
+        // Add English-only storage notice near the active form
+        const activeForm = document.getElementById('registerForm')?.style.display !== 'none'
+          ? document.getElementById('registerForm')
+          : document.getElementById('loginForm');
+        if (activeForm && !activeForm.querySelector('.lang-notice')) {
+            const note = document.createElement('small');
+            note.className = 'lang-notice hint';
+            note.style.display = 'block';
+            note.style.marginTop = '6px';
+            note.textContent = 'Default language is English. Non-English input will be auto-translated and stored in English.';
+            activeForm.appendChild(note);
+        }
     }
 
     showMessage(message, type = 'info') {

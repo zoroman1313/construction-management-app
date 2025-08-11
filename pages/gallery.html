@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en-GB" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Gallery</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/auth.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta name="theme-color" content="#ff8c42">
+  <meta name="msapplication-navbutton-color" content="#ff8c42">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="mobile-web-app-capable" content="yes">
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <div class="logo"><i class="fas fa-building"></i><span>Building</span></div>
+      <nav class="nav">
+        <ul class="nav-list">
+          <li><a href="../index.html" class="nav-link"><i class="fas fa-home"></i></a></li>
+          <li><a href="users.html" class="nav-link"><i class="fas fa-users"></i></a></li>
+          <li><a href="contractors.html" class="nav-link"><i class="fas fa-hard-hat"></i></a></li>
+          <li><a href="providers.html" class="nav-link"><i class="fas fa-handshake"></i></a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="container">
+      <div class="page-header">
+        <button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i><span>Back</span></button>
+        <h1 class="page-title">Gallery</h1>
+      </div>
+      <p class="page-subtitle">Manage photos and videos</p>
+    </div>
+  </main>
+
+  <footer class="footer"><p>&copy; 2024 Construction Management System</p></footer>
+
+  <script src="../js/auth.js"></script>
+  <script>
+    function goBack(){ window.history.back(); }
+  </script>
+</body>
+</html>
+
+

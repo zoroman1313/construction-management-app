@@ -24,6 +24,17 @@ class QuoteWizard {
     this.renderChecklist();
     document.getElementById('aiSuggestBtn')?.addEventListener('click', ()=>this.aiSuggest());
     document.getElementById('generatePdf')?.addEventListener('click', ()=>this.generatePdf());
+    // Add English-only storage notice near terms field
+    const terms = document.getElementById('terms');
+    if (terms && !document.getElementById('langNoticeWizard')) {
+      const note = document.createElement('small');
+      note.id = 'langNoticeWizard';
+      note.className = 'hint';
+      note.style.display = 'block';
+      note.style.marginTop = '.25rem';
+      note.textContent = 'Default language is English. Non-English input will be auto-translated and stored in English.';
+      terms.parentElement?.appendChild(note);
+    }
     this.ensureTradeUI();
     this.ensureLangAndActivate();
   }
@@ -237,12 +248,12 @@ class QuoteWizard {
     const hasAI = !!(window.aiAssistant && window.aiAssistant.key);
     try {
       if (hasAI) {
-        const prompt = `
+      const prompt = `
 Brief: ${this.state.lead.brief}
 Checklist: ${JSON.stringify(this.state.checklist)}
 Measurements: ${JSON.stringify(this.state.measures)}
 Trades: ${JSON.stringify(this.state.trades)}
-Sample catalog: ${JSON.stringify((window.PRICE_CATALOG||[]).slice(0,5))}
+ Sample catalogue: ${JSON.stringify((window.PRICE_CATALOG||[]).slice(0,5))}
 Reference rates: ${JSON.stringify((window.LABOUR_RATES||[]).slice(0,5))}
 Based on the above, provide a suggested Bill of Quantities (BoQ) in JSON array format:
 [{ "title":"...", "unit":"...", "qty":..., "unitPrice":..., "mgmt_pct":..., "contingency_pct":..., "time_hours":... }]`;
@@ -364,6 +375,25 @@ Based on the above, provide a suggested Bill of Quantities (BoQ) in JSON array f
   }
 }
 
-document.addEventListener('DOMContentLoaded', ()=>{ window.quoteWizard = new QuoteWizard(); });
+document.addEventListener('DOMContentLoaded', ()=>{
+  window.quoteWizard = new QuoteWizard();
+  // Handle deep links: ?open=quote|ai, ?view=reports|estimates|projects|finances
+  setTimeout(()=>{
+    try{
+      const url = new URL(window.location.href);
+      const openParam = url.searchParams.get('open') || (url.hash.includes('open=') ? new URLSearchParams(url.hash.slice(1)).get('open') : null);
+      const viewParam = url.searchParams.get('view') || (url.hash.includes('view=') ? new URLSearchParams(url.hash.slice(1)).get('view') : null);
+      if (openParam === 'quote') {
+        window.quoteWizard.open();
+      }
+      if (openParam === 'ai' && window.aiAssistant && typeof window.aiAssistant.openModal === 'function') {
+        window.aiAssistant.openModal();
+      }
+      if (viewParam && window.contractorsManager && typeof window.contractorsManager.showServiceDetails === 'function') {
+        window.contractorsManager.showServiceDetails(viewParam);
+      }
+    } catch(e){}
+  }, 0);
+});
 
 
