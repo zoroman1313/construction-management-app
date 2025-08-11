@@ -1,5 +1,5 @@
 // Users Management System - Construction Management App
-// سیستم مدیریت کاربران - اپلیکیشن مدیریت ساختمان
+// Users management system - Construction Management App
 
 class UsersManager {
     constructor() {
@@ -74,37 +74,37 @@ class UsersManager {
         const sampleUsers = [
             {
                 id: '1',
-                name: 'علی احمدی',
+                name: 'Ali Ahmadi',
                 phone: '09123456789',
                 category: 'jobseekers',
-                skills: 'کارگر ساده، بیل‌زنی',
+                skills: 'General laborer, digging',
                 experience: 2,
                 createdAt: new Date().toISOString()
             },
             {
                 id: '2',
-                name: 'محمد رضایی',
+                name: 'Mohammad Rezaei',
                 phone: '09187654321',
                 category: 'workers',
-                skills: 'سیمان‌کاری، گچ‌کاری',
+                skills: 'Plastering, cement work',
                 experience: 5,
                 createdAt: new Date().toISOString()
             },
             {
                 id: '3',
-                name: 'حسن کریمی',
+                name: 'Hassan Karimi',
                 phone: '09111223344',
                 category: 'specialists',
-                skills: 'مهندس عمران، طراحی سازه',
+                skills: 'Civil engineer, structural design',
                 experience: 8,
                 createdAt: new Date().toISOString()
             },
             {
                 id: '4',
-                name: 'رضا نوری',
+                name: 'Reza Noori',
                 phone: '09155667788',
                 category: 'contractors',
-                skills: 'مدیریت پروژه، پیمانکاری',
+                skills: 'Project management, contracting',
                 experience: 12,
                 createdAt: new Date().toISOString()
             }
@@ -128,10 +128,10 @@ class UsersManager {
     createCategoryPage(category, users) {
         const main = document.querySelector('.main .container');
         const categoryNames = {
-            'jobseekers': 'کارجویان',
-            'workers': 'کارگران',
-            'specialists': 'متخصصین',
-            'contractors': 'پیمانکاران'
+            'jobseekers': 'Jobseekers',
+            'workers': 'Workers',
+            'specialists': 'Specialists',
+            'contractors': 'Contractors'
         };
 
         const categoryName = categoryNames[category] || category;
@@ -139,8 +139,8 @@ class UsersManager {
         main.innerHTML = `
             <div class="page-header">
                 <button class="back-btn" onclick="usersManager.goBackToUsers()">
-                    <i class="fas fa-arrow-right"></i>
-                    <span>بازگشت</span>
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back</span>
                 </button>
                 <h1 class="page-title">${categoryName}</h1>
             </div>
@@ -149,7 +149,7 @@ class UsersManager {
                 <div class="stat-card">
                     <i class="fas fa-users"></i>
                     <span class="stat-number">${users.length}</span>
-                    <span class="stat-label">کل ${categoryName}</span>
+                    <span class="stat-label">Total ${categoryName}</span>
                 </div>
             </div>
             
@@ -160,7 +160,7 @@ class UsersManager {
             <div class="action-buttons">
                 <button class="add-btn" onclick="usersManager.showAddUserForm()">
                     <i class="fas fa-plus"></i>
-                    <span>افزودن ${categoryName.slice(0, -1)} جدید</span>
+                    <span>Add new ${categoryName.slice(0, -1)}</span>
                 </button>
             </div>
         `;
@@ -216,7 +216,7 @@ class UsersManager {
                     ${user.experience ? `
                         <p class="user-experience">
                             <i class="fas fa-clock"></i>
-                            ${user.experience} سال تجربه
+                            ${user.experience} years experience
                         </p>
                     ` : ''}
                 </div>
@@ -231,11 +231,11 @@ class UsersManager {
                 <div class="empty-icon">
                     <i class="fas fa-users"></i>
                 </div>
-                <h3>هیچ ${categoryName.slice(0, -1)}ی یافت نشد</h3>
-                <p>هنوز ${categoryName.slice(0, -1)}ی اضافه نکرده‌اید</p>
+                <h3>No ${categoryName.slice(0, -1)} found</h3>
+                <p>You have not added any ${categoryName.slice(0, -1)} yet</p>
                 <button class="add-btn" onclick="usersManager.showAddUserForm()">
                     <i class="fas fa-plus"></i>
-                    <span>افزودن اولین ${categoryName.slice(0, -1)}</span>
+                    <span>Add the first ${categoryName.slice(0, -1)}</span>
                 </button>
             </div>
         `;
@@ -283,7 +283,7 @@ class UsersManager {
 
         // Validation
         if (!userData.name || !userData.phone || !userData.category) {
-            this.showMessage('لطفاً تمام فیلدهای ضروری را پر کنید', 'error');
+            this.showMessage('Please fill in all required fields', 'error');
             return;
         }
 
@@ -291,7 +291,7 @@ class UsersManager {
         this.users.push(userData);
         localStorage.setItem('constructionUsers', JSON.stringify(this.users));
         
-        this.showMessage('کاربر با موفقیت اضافه شد! 🎉', 'success');
+        this.showMessage('User added successfully! 🎉', 'success');
         this.closeAddUserModal();
         
         // Update UI
@@ -309,7 +309,7 @@ class UsersManager {
         if (!user) return;
 
         // For now, just show a message
-        this.showMessage(`ویرایش کاربر ${user.name} - این قابلیت به زودی اضافه خواهد شد`, 'info');
+        this.showMessage(`Edit user ${user.name} - This feature will be added soon`, 'info');
     }
 
     // 🗑️ Delete user
@@ -317,11 +317,11 @@ class UsersManager {
         const user = this.users.find(u => u.id === userId);
         if (!user) return;
 
-        if (confirm(`آیا مطمئن هستید که می‌خواهید ${user.name} را حذف کنید؟`)) {
+        if (confirm(`Are you sure you want to delete ${user.name}?`)) {
             this.users = this.users.filter(u => u.id !== userId);
             localStorage.setItem('constructionUsers', JSON.stringify(this.users));
             
-            this.showMessage('کاربر با موفقیت حذف شد', 'success');
+            this.showMessage('User deleted successfully', 'success');
             this.updateUserCounts();
             
             // If we're in a category view, refresh it

@@ -1,5 +1,5 @@
 // Login Page Script - Construction Management App
-// اسکریپت صفحه لاگین - اپلیکیشن مدیریت ساختمان
+// Login page script - Construction Management App
 
 class LoginPageManager {
     constructor() {
@@ -99,14 +99,14 @@ class LoginPageManager {
                 if (success) {
                     this.redirectAfterLogin();
                 } else {
-                    this.showMessage('ایمیل یا رمز عبور اشتباه است', 'error');
+                    this.showMessage('Incorrect email or password', 'error');
                 }
             } else {
-                this.showMessage('خطا در سیستم احراز هویت', 'error');
+                this.showMessage('Authentication system error', 'error');
             }
         } catch (error) {
             console.error('Login error:', error);
-            this.showMessage('خطا در ورود به سیستم', 'error');
+            this.showMessage('Sign-in error', 'error');
         }
     }
 
@@ -130,29 +130,29 @@ class LoginPageManager {
         };
         
         // Basic validations
-        if (!this.emailVerified) { this.showMessage('ایمیل تایید نشده است', 'error'); return; }
-        if (!this.phoneVerified) { this.showMessage('شماره تلفن تایید نشده است', 'error'); return; }
+        if (!this.emailVerified) { this.showMessage('Email is not verified', 'error'); return; }
+        if (!this.phoneVerified) { this.showMessage('Phone number is not verified', 'error'); return; }
         const acceptTerms = document.getElementById('acceptTerms');
-        if (acceptTerms && !acceptTerms.checked) { this.showMessage('پذیرش شرایط اجباری است', 'error'); return; }
+        if (acceptTerms && !acceptTerms.checked) { this.showMessage('Accepting the terms is required', 'error'); return; }
         
         try {
             // Use the global SimpleAuth instance
             if (window.simpleAuth) {
                 const success = await window.simpleAuth.register(name, email, phone, password, extra);
                 if (success) {
-                    this.showMessage('ثبت‌نام با موفقیت انجام شد! حالا وارد شوید', 'success');
+                    this.showMessage('Registration successful! Please sign in now', 'success');
                     this.switchToLogin();
                     // Clear register form
                     e.target.reset();
                 } else {
-                    this.showMessage('خطا در ثبت‌نام', 'error');
+                    this.showMessage('Registration error', 'error');
                 }
             } else {
-                this.showMessage('خطا در سیستم احراز هویت', 'error');
+                this.showMessage('Authentication system error', 'error');
             }
         } catch (error) {
             console.error('Register error:', error);
-            this.showMessage('خطا در ثبت‌نام', 'error');
+            this.showMessage('Registration error', 'error');
         }
     }
 
@@ -164,14 +164,14 @@ class LoginPageManager {
                 if (success) {
                     this.redirectAfterLogin();
                 } else {
-                    this.showMessage('خطا در ورود با Google', 'error');
+                    this.showMessage('Google sign-in error', 'error');
                 }
             } else {
-                this.showMessage('خطا در سیستم احراز هویت', 'error');
+                this.showMessage('Authentication system error', 'error');
             }
         } catch (error) {
             console.error('Google Sign-In error:', error);
-            this.showMessage('خطا در ورود با Google', 'error');
+            this.showMessage('Google sign-in error', 'error');
         }
     }
 
@@ -215,22 +215,22 @@ class LoginPageManager {
     sendEmailCode(btn) {
         const email = (document.getElementById('registerEmail')||{}).value?.trim();
         const emailRegex = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
-        if (!email || !emailRegex.test(email)) { this.showMessage('ایمیل معتبر نیست', 'error'); return; }
+        if (!email || !emailRegex.test(email)) { this.showMessage('Email is not valid', 'error'); return; }
         this.emailOtp = String(Math.floor(100000 + Math.random() * 900000));
         this.emailVerified = false;
-        this.updateBadge('emailVerifyStatus', 'در انتظار کد', 'error');
-        this.showMessage('کد تایید ایمیل ارسال شد (شبیه‌سازی)', 'success');
+        this.updateBadge('emailVerifyStatus', 'Waiting for code', 'error');
+        this.showMessage('Email verification code sent (simulated)', 'success');
         this.startCountdown(btn, 60);
         console.log('Email OTP (sim):', this.emailOtp);
     }
 
     sendSmsCode(btn) {
         const phone = (document.getElementById('registerPhone')||{}).value?.trim();
-        if (!phone || phone.length < 9) { this.showMessage('شماره معتبر نیست', 'error'); return; }
+        if (!phone || phone.length < 9) { this.showMessage('Phone number is not valid', 'error'); return; }
         this.smsOtp = String(Math.floor(100000 + Math.random() * 900000));
         this.phoneVerified = false;
-        this.updateBadge('smsVerifyStatus', 'در انتظار کد', 'error');
-        this.showMessage('کد تایید پیامک ارسال شد (شبیه‌سازی)', 'success');
+        this.updateBadge('smsVerifyStatus', 'Waiting for code', 'error');
+        this.showMessage('SMS verification code sent (simulated)', 'success');
         this.startCountdown(btn, 60);
         console.log('SMS OTP (sim):', this.smsOtp);
     }
@@ -239,7 +239,7 @@ class LoginPageManager {
         const val = (document.getElementById('emailOtpInput')||{}).value?.trim();
         if (val && val.length === 6 && val === this.emailOtp) {
             this.emailVerified = true;
-            this.updateBadge('emailVerifyStatus', 'تایید شد', 'success');
+            this.updateBadge('emailVerifyStatus', 'Verified', 'success');
         }
     }
 
@@ -247,7 +247,7 @@ class LoginPageManager {
         const val = (document.getElementById('smsOtpInput')||{}).value?.trim();
         if (val && val.length === 6 && val === this.smsOtp) {
             this.phoneVerified = true;
-            this.updateBadge('smsVerifyStatus', 'تایید شد', 'success');
+            this.updateBadge('smsVerifyStatus', 'Verified', 'success');
         }
     }
 
@@ -265,7 +265,7 @@ class LoginPageManager {
         const original = btn.textContent;
         let s = sec;
         const t = setInterval(() => {
-            btn.textContent = `ارسال دوباره (${s--})`;
+            btn.textContent = `Resend (${s--})`;
             if (s < 0) {
                 clearInterval(t);
                 btn.textContent = original;
@@ -283,8 +283,8 @@ class LoginPageManager {
         const local = [
             {postal:'CM1', city:'Chelmsford', province:'Essex', country:'GB', tokens:['cm','chel','cm1','essex']},
             {postal:'CM2', city:'Chelmsford', province:'Essex', country:'GB', tokens:['cm','chel','cm2','essex']},
-            {postal:'10139', city:'Tehran', province:'Tehran', country:'IR', tokens:['teh','tehran','تهران','101','10139']},
-            {postal:'71949', city:'Shiraz', province:'Fars', country:'IR', tokens:['shi','shiraz','شیراز','719']},
+            {postal:'10139', city:'Tehran', province:'Tehran', country:'IR', tokens:['teh','tehran','101','10139']},
+            {postal:'71949', city:'Shiraz', province:'Fars', country:'IR', tokens:['shi','shiraz','719']},
         ];
         let results = local.filter(x => x.country===country && x.tokens.some(t=>t.startsWith(q))).slice(0,10);
         if (results.length===0 && country==='GB' && q.length>=3) {
@@ -362,13 +362,13 @@ class LoginPageManager {
         if (this.intendedDestination && this.intendedDestination !== 'index') {
             const subtitle = document.querySelector('.login-subtitle');
             if (subtitle) {
-                const destinationNames = {
-                    'users': 'کاربران',
-                    'contractors': 'پیمانکاران',
-                    'providers': 'ارایه دهندگان'
+        const destinationNames = {
+                    'users': 'Users',
+                    'contractors': 'Contractors',
+                    'providers': 'Providers'
                 };
-                const destinationName = destinationNames[this.intendedDestination] || 'خدمات';
-                subtitle.textContent = `برای دسترسی به بخش ${destinationName}، ابتدا وارد شوید`;
+                const destinationName = destinationNames[this.intendedDestination] || 'services';
+                subtitle.textContent = `Please sign in to access the ${destinationName} section`;
             }
         }
     }

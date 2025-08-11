@@ -45,15 +45,15 @@ class AIAssistant {
     saveBtn?.addEventListener('click', async () => {
       const raw = (document.getElementById('openaiKey').value || '').trim();
       if (!raw) return;
-      const remember = confirm('کلید روی این دستگاه نگهداری شود؟ تایید = بله (localStorage)، انصراف = فقط نشست جاری');
+      const remember = confirm('Keep the key on this device? OK = yes (localStorage), Cancel = session only');
       this.setKey(raw, remember);
-      if (keyStatus) {
-        keyStatus.textContent = 'در حال بررسی کلید...';
+        if (keyStatus) {
+        keyStatus.textContent = 'Checking key...';
         keyStatus.style.color = '#6c757d';
       }
       const ok = await this.testKey();
       if (keyStatus) {
-        keyStatus.textContent = ok ? 'کلید معتبر است ✅' : 'کلید نامعتبر یا دسترسی مسدود ❌';
+        keyStatus.textContent = ok ? 'Key is valid ✅' : 'Invalid key or access denied ❌';
         keyStatus.style.color = ok ? '#28a745' : '#dc3545';
       }
     });
@@ -61,7 +61,7 @@ class AIAssistant {
     clearBtn?.addEventListener('click', () => {
       sessionStorage.removeItem('openai_key'); localStorage.removeItem('openai_key');
       if (keyInput) keyInput.value = '';
-      if (keyStatus) { keyStatus.textContent = 'کلید حذف شد.'; keyStatus.style.color = '#6c757d'; }
+      if (keyStatus) { keyStatus.textContent = 'Key cleared.'; keyStatus.style.color = '#6c757d'; }
     });
 
     // Tabs
@@ -81,9 +81,9 @@ class AIAssistant {
       const model = document.getElementById('chatModel').value;
       if (!prompt) return;
       const out = document.getElementById('chatOutput');
-      if (out) out.textContent = 'در حال پردازش...';
+      if (out) out.textContent = 'Processing...';
       const res = await this.chat(prompt, model);
-      if (out) out.textContent = res || 'خطا در دریافت پاسخ';
+      if (out) out.textContent = res || 'Error receiving response';
     });
 
     // Voice
@@ -100,33 +100,33 @@ class AIAssistant {
         this.mediaRecorder.onstop = async () => {
           const blob = new Blob(this.chunks, { type: this.mediaRecorder.mimeType || 'audio/webm' });
           const out = document.getElementById('sttOutput');
-          if (out) out.textContent = 'در حال ارسال صدا...';
+           if (out) out.textContent = 'Sending audio...';
           const model = document.getElementById('sttModel').value;
           const text = await this.transcribe(blob, model);
-          if (out) out.textContent = text || 'خطا در تبدیل گفتار به متن';
+           if (out) out.textContent = text || 'Error transcribing audio';
         };
         this.mediaRecorder.start();
         const rb = document.getElementById('recBtn');
-        if (rb) rb.textContent = 'پایان ضبط';
+        if (rb) rb.textContent = 'Stop recording';
         this.mediaRecorder.addEventListener('stop', () => {
           const btn = document.getElementById('recBtn');
-          if (btn) btn.innerHTML = '<i class="fas fa-microphone"></i> ضبط';
+           if (btn) btn.innerHTML = '<i class="fas fa-microphone"></i> Record';
         });
       } catch (e) {
         const out = document.getElementById('sttOutput');
-        if (out) out.textContent = 'عدم دسترسی به میکروفون یا پشتیبانی مرورگر.';
+        if (out) out.textContent = 'No microphone access or unsupported browser.';
       }
     });
 
     // Image
     document.getElementById('analyzeBtn')?.addEventListener('click', async () => {
       const file = document.getElementById('imageFile').files?.[0];
-      const prompt = (document.getElementById('imagePrompt').value || 'لطفا تصویر را تحلیل کن').trim();
+      const prompt = (document.getElementById('imagePrompt').value || 'Please analyze the image').trim();
       const out = document.getElementById('imageOutput');
-      if (!file) { if (out) out.textContent = 'ابتدا تصویر را انتخاب کنید.'; return; }
-      if (out) out.textContent = 'در حال تحلیل تصویر...';
+      if (!file) { if (out) out.textContent = 'Please select an image first.'; return; }
+      if (out) out.textContent = 'Analyzing image...';
       const res = await this.analyzeImage(file, prompt);
-      if (out) out.textContent = res || 'خطا در تحلیل تصویر';
+      if (out) out.textContent = res || 'Error analyzing image';
     });
   }
 

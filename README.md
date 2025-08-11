@@ -1,79 +1,79 @@
-# 🏗️ سیستم مدیریت ساختمان
+# 🏗️ Construction Management System
 
-یک وب اپلیکیشن مدرن و responsive برای مدیریت پروژه‌های ساختمانی
+A modern, responsive web app for managing construction projects.
 
-## ✨ ویژگی‌ها
+## ✨ Features
 
-- 🎨 **طراحی مینیمال و زیبا** - رابط کاربری ساده و غیر گیج‌کننده
-- 📱 **Responsive Design** - کار روی همه دستگاه‌ها (موبایل، تبلت، لپ‌تاپ)
-- 🔧 **آیکون‌محور** - استفاده زیاد از آیکون‌ها به جای متن
-- 🎯 **کاربرپسند** - مناسب برای کارگران ساختمانی با هر سطح سواد
-- 🚀 **سریع و سبک** - بارگذاری سریع و عملکرد بهینه
+- 🎨 **Clean, minimal design** - Simple UI without confusion
+- 📱 **Responsive Design** - Works on mobile, tablet, and desktop
+- 🔧 **Icon-first** - Extensive use of icons instead of long texts
+- 🎯 **User-friendly** - Suitable for all skill levels
+- 🚀 **Fast and lightweight** - Quick load times and optimized performance
 
-## 🎨 رنگ‌بندی
+## 🎨 Color Palette
 
-- **نارنجی گرم** (#ff8c42) - رنگ اصلی و کلاه ایمنی
-- **زرد روشن** (#ffd700) - رنگ هشدار و ایمنی
-- **آبی آسمانی** (#87ceeb) - رنگ آسمان
-- **سبز** (#32cd32) - رنگ ایمنی و تکمیل
+- **Warm orange** (#ff8c42) - Primary color and helmet
+- **Bright yellow** (#ffd700) - Warnings and safety
+- **Sky blue** (#87ceeb) - Sky color
+- **Green** (#32cd32) - Safety and completion
 
-## 📁 ساختار پروژه
+## 📁 Project Structure
 
 ```
 Accounting/
-├── index.html          # صفحه اصلی
+├── index.html          # Main page
 ├── css/
-│   └── style.css      # استایل‌های اصلی
+│   └── style.css      # Main styles
 ├── js/
-│   ├── script.js      # کدهای عمومی و ناوبری
-│   ├── auth.js        # SimpleAuth (بدون هیچ پلاگین خارجی)
-│   ├── users.js       # منطق صفحه کاربران
-│   ├── contractors.js # منطق صفحه پیمانکاران
-│   └── login-page.js  # منطق صفحه لاگین مستقل
-├── pages/             # صفحات داخلی (users/contractors/providers/login)
-└── images/            # تصاویر و آیکون‌ها
+│   ├── script.js      # Common code and navigation
+│   ├── auth.js        # SimpleAuth (no external plugins)
+│   ├── users.js       # Users page logic
+│   ├── contractors.js # Contractors page logic
+│   └── login-page.js  # Standalone login page logic
+├── pages/             # Inner pages (users/contractors/providers/login)
+└── images/            # Images and icons
 ```
 
-## 🚀 نحوه اجرا
+## 🚀 How to run
 
-1. فایل `index.html` را در مرورگر باز کنید
-2. یا از یک سرور محلی استفاده کنید:
+1. Open `index.html` in your browser
+2. Or use a local server:
    ```bash
    cd /Users/shahradmeyghani/Desktop/Ali/countractor/Accounting
    python3 -m http.server 8001
-   # یا
+   # or
    npx serve .
    ```
 
-## 🛠️ تکنولوژی‌های استفاده شده
+## 🛠️ Technologies
 
 - **HTML5**, **CSS3**, **JavaScript ES6+**
-- **Font Awesome** برای آیکون‌ها
-- بدون هیچ وابستگی به Firebase یا پلاگین دیگر
+- **Font Awesome** for icons
+- No Firebase or other external plugin dependencies
 
-## 🔐 احراز هویت (SimpleAuth)
+## 🔐 Authentication (SimpleAuth)
 
-- ذخیره‌سازی کاربر در `localStorage`
-- ورود، ثبت‌نام، خروج
-- شبیه‌سازی ورود با Google (بدون سرویس خارجی)
-- هدایت خودکار به مقصد مورد نظر پس از لاگین (`intendedDestination`)
+- Store user in `localStorage`
+- Sign in, Register, Logout
+- Simulated Google Sign-In (no external service)
+- Auto-redirect to intended destination after login (`intendedDestination`)
 
-کلاس اصلی در `js/auth.js` با نام `SimpleAuth` پیاده‌سازی شده و در `window.simpleAuth` در دسترس است.
+The main class `SimpleAuth` is implemented in `js/auth.js` and is available via `window.simpleAuth`.
 
-## 📄 صفحات احراز هویت
+## 📄 Authentication pages
 
-- `pages/login.html` صفحه لاگین/ثبت‌نام مستقل با OTP شبیه‌سازی‌شده برای ایمیل و SMS
-- هدایت از منوهای صفحه اصلی به این صفحه با مقصد مشخص (users/contractors/providers)
+- `pages/login.html` standalone login/register page with simulated OTP for email and SMS
+- Navigation from main page menus to this page with a specific destination (users/contractors/providers)
 
-## 🧭 ناوبری
+## 🧭 Navigation
 
-- کلیک روی کارت‌های صفحه اصلی → اگر وارد نشده باشید به `pages/login.html` هدایت می‌شوید
-- پس از ورود موفق، به صفحه مقصد هدایت می‌شوید
+- Clicking main page cards → if not signed in, redirect to `pages/login.html`
+- After successful login, redirect to the destination page
 
-## 📞 پشتیبانی
+## 📞 Support
 
-برای سوالات و پیشنهادات، لطفاً با تیم توسعه تماس بگیرید.
+For questions and suggestions, please contact the development team.
 
 ---
 
-**ساخته شده با ❤️ برای صنعت ساختمان ایران**
+Built with ❤️ for the construction industry

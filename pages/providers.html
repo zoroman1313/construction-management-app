@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ارایه دهندگان خدمات - سیستم مدیریت ساختمان</title>
+    <title>Service Providers - Construction Management</title>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/auth.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -14,34 +14,31 @@
         <div class="header-content">
             <div class="logo">
                 <i class="fas fa-building"></i>
-                <span>ساختمان</span>
+                <span>Building</span>
             </div>
             
             <!-- User Profile Section -->
             <div class="user-profile" id="userProfile" style="display: none;">
                 <div class="user-info">
-                    <img src="../images/default-avatar.svg" alt="عکس پروفایل" class="user-avatar" id="userAvatar">
-                    <span class="user-name" id="userName">نام کاربر</span>
+                    <img src="../images/default-avatar.svg" alt="Profile photo" class="user-avatar" id="userAvatar">
+                    <span class="user-name" id="userName">User</span>
                 </div>
                 <button class="logout-btn" id="logoutBtn">
                     <i class="fas fa-sign-out-alt"></i>
-                    <span>خروج</span>
+                    <span>Logout</span>
                 </button>
             </div>
             
             <!-- Back Button -->
-            <button class="back-btn" onclick="goBack()">
-                <i class="fas fa-arrow-right"></i>
-                <span>بازگشت</span>
-            </button>
+            <button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i><span>Back</span></button>
         </div>
     </header>
 
     <!-- Main Content -->
     <main class="main">
         <div class="container">
-            <h1 class="main-title">ارایه دهندگان خدمات</h1>
-            <p class="main-subtitle">کسانی که کار یا جنسی دارند و دنبال خریدار یا نیرو می‌گردند</p>
+            <h1 class="main-title">Service Providers</h1>
+            <p class="main-subtitle">Those who have jobs or materials and seek buyers/workers</p>
             
             <!-- Service Categories -->
             <div class="service-categories">
@@ -49,45 +46,45 @@
                     <div class="category-icon">
                         <i class="fas fa-boxes"></i>
                     </div>
-                    <h3 class="category-title">مواد و مصالح</h3>
-                    <p class="category-description">سیمان، آجر، فولاد، چوب و سایر مصالح ساختمانی</p>
+                    <h3 class="category-title">Materials</h3>
+                    <p class="category-description">Cement, bricks, steel, timber and more</p>
                 </div>
                 
                 <div class="category-item" onclick="showProviderCategory('equipment')">
                     <div class="category-icon">
                         <i class="fas fa-tools"></i>
                     </div>
-                    <h3 class="category-title">ابزار و تجهیزات</h3>
-                    <p class="category-description">ابزار دستی، ماشین‌آلات، تجهیزات ایمنی</p>
+                    <h3 class="category-title">Tools & Equipment</h3>
+                    <p class="category-description">Hand tools, machinery, safety equipment</p>
                 </div>
                 
                 <div class="category-item" onclick="showProviderCategory('services')">
                     <div class="category-icon">
                         <i class="fas fa-cogs"></i>
                     </div>
-                    <h3 class="category-title">خدمات تخصصی</h3>
-                    <p class="category-description">طراحی، مشاوره، نظارت و کنترل کیفیت</p>
+                    <h3 class="category-title">Specialist Services</h3>
+                    <p class="category-description">Design, consultancy, supervision, QA</p>
                 </div>
                 
                 <div class="category-item" onclick="showProviderCategory('labor')">
                     <div class="category-icon">
                         <i class="fas fa-users"></i>
                     </div>
-                    <h3 class="category-title">نیروی کار</h3>
-                    <p class="category-description">کارگران ماهر، متخصصین و تکنسین‌ها</p>
+                    <h3 class="category-title">Labour</h3>
+                    <p class="category-description">Skilled workers, specialists and technicians</p>
                 </div>
             </div>
             
             <!-- Featured Providers -->
             <section class="featured-providers">
-                <h2 class="section-title">ارایه دهندگان برتر</h2>
+                <h2 class="section-title">Featured providers</h2>
                 <div class="providers-grid">
                     <div class="provider-card">
                         <div class="provider-header">
-                            <img src="../images/default-avatar.svg" alt="ارایه دهنده" class="provider-avatar">
+                            <img src="../images/default-avatar.svg" alt="Provider" class="provider-avatar">
                             <div class="provider-info">
-                                <h3 class="provider-name">شرکت مصالح ساختمانی تهران</h3>
-                                <p class="provider-type">مواد و مصالح</p>
+                                <h3 class="provider-name">Tehran Building Materials Co.</h3>
+                                <p class="provider-type">Materials</p>
                                 <div class="provider-rating">
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star"></i>
@@ -98,19 +95,19 @@
                                 </div>
                             </div>
                         </div>
-                        <p class="provider-description">ارایه دهنده انواع مصالح ساختمانی با کیفیت بالا و قیمت مناسب</p>
+                            <p class="provider-description">Supplier of high-quality building materials at fair prices</p>
                         <div class="provider-actions">
-                            <button class="contact-btn">تماس</button>
-                            <button class="details-btn">جزئیات</button>
+                            <button class="contact-btn">Contact</button>
+                            <button class="details-btn">Details</button>
                         </div>
                     </div>
                     
                     <div class="provider-card">
                         <div class="provider-header">
-                            <img src="../images/default-avatar.svg" alt="ارایه دهنده" class="provider-avatar">
+                            <img src="../images/default-avatar.svg" alt="Provider" class="provider-avatar">
                             <div class="provider-info">
-                                <h3 class="provider-name">گروه ابزارآلات صنعتی</h3>
-                                <p class="provider-type">ابزار و تجهیزات</p>
+                                <h3 class="provider-name">Industrial Tools Group</h3>
+                                <p class="provider-type">Tools & Equipment</p>
                                 <div class="provider-rating">
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star"></i>
@@ -121,10 +118,10 @@
                                 </div>
                             </div>
                         </div>
-                        <p class="provider-description">تخصص در ارایه ابزارآلات حرفه‌ای و تجهیزات ایمنی</p>
+                            <p class="provider-description">Specialized in professional tools and safety gear</p>
                         <div class="provider-actions">
-                            <button class="contact-btn">تماس</button>
-                            <button class="details-btn">جزئیات</button>
+                            <button class="contact-btn">Contact</button>
+                            <button class="details-btn">Details</button>
                         </div>
                     </div>
                 </div>
@@ -134,7 +131,7 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <p>&copy; 2024 سیستم مدیریت ساختمان</p>
+        <p>&copy; 2024 Construction Management System</p>
     </footer>
 
     <script src="../js/auth.js"></script>
@@ -161,7 +158,7 @@
             if (userProfile && userName && userAvatar) {
                 const currentUser = window.simpleAuth.getCurrentUser();
                 if (currentUser) {
-                    userName.textContent = currentUser.name || 'کاربر';
+                    userName.textContent = currentUser.name || 'User';
                     userProfile.style.display = 'flex';
                 }
             }
@@ -170,7 +167,7 @@
         function showProviderCategory(category) {
             console.log('Showing provider category:', category);
             // This will be implemented to show specific category details
-            alert(`نمایش دسته‌بندی: ${category}`);
+            alert(`Showing category: ${category}`);
         }
         
         function goBack() {

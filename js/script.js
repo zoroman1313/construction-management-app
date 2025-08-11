@@ -1,8 +1,8 @@
 // Main Application Script - Construction Management System
-// اسکریپت اصلی اپلیکیشن - سیستم مدیریت ساختمان
+// Main app script - Construction Management System
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🏗️ سیستم مدیریت ساختمان آماده است');
+    console.log('🏗️ Construction Management System is ready');
     
     // Initialize main menu functionality
     initializeMainMenu();
@@ -146,7 +146,7 @@ function improveMobileAccessibility() {
 
 // Main Menu Functionality
 function initializeMainMenu() {
-    // Users Menu - کارجویان، کارگران، متخصصین و پیمانکاران
+    // Users Menu - jobseekers, workers, specialists and contractors
     const usersMenu = document.getElementById('usersMenu');
     if (usersMenu) {
         usersMenu.addEventListener('click', () => {
@@ -156,7 +156,7 @@ function initializeMainMenu() {
         });
     }
     
-    // Contractors Menu - خدمات مخصوص پیمانکاران
+    // Contractors Menu - contractor-specific services
     const contractorsMenu = document.getElementById('contractorsMenu');
     if (contractorsMenu) {
         contractorsMenu.addEventListener('click', () => {
@@ -166,7 +166,7 @@ function initializeMainMenu() {
         });
     }
     
-    // Service Providers Menu - ارایه دهندگان خدمات
+    // Service Providers Menu - providers
     const providersMenu = document.getElementById('providersMenu');
     if (providersMenu) {
         providersMenu.addEventListener('click', () => {
@@ -217,9 +217,9 @@ function showLoginPrompt(section) {
 // Get Persian section name
 function getSectionName(section) {
     const sectionNames = {
-        'users': 'کاربران',
-        'contractors': 'پیمانکاران',
-        'providers': 'ارایه دهندگان'
+        'users': 'Users',
+        'contractors': 'Contractors',
+        'providers': 'Providers'
     };
     return sectionNames[section] || section;
 }
@@ -250,7 +250,6 @@ function proceedToSection(section) {
 }
 
 // These functions are now deprecated - navigation is handled directly in proceedToSection
-// توابع قدیمی - هدایت مستقیماً در proceedToSection انجام می‌شود
 
 // Go back to main menu
 function goBackToMain() {
@@ -265,7 +264,7 @@ function showLoadingMessage() {
     loadingDiv.innerHTML = `
         <div class="loading-content">
             <i class="fas fa-spinner fa-spin"></i>
-            <p>در حال بارگذاری...</p>
+            <p>Loading...</p>
         </div>
     `;
     document.body.appendChild(loadingDiv);

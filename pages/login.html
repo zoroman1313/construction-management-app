@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -8,7 +8,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="theme-color" content="#ff8c42">
     <meta name="msapplication-navbutton-color" content="#ff8c42">
-    <title>ورود به سیستم - سیستم مدیریت ساختمان</title>
+    <title>Sign in - Construction Management</title>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/auth.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -19,13 +19,13 @@
         <div class="header-content">
             <div class="logo">
                 <i class="fas fa-building"></i>
-                <span>ساختمان</span>
+                <span>Building</span>
             </div>
             
             <div class="header-actions">
                 <a href="../index.html" class="back-home-btn">
                     <i class="fas fa-home"></i>
-                    <span>بازگشت به خانه</span>
+                    <span>Back to home</span>
                 </a>
             </div>
         </div>
@@ -36,76 +36,77 @@
         <div class="container">
             <div class="login-container">
                 <div class="login-header">
-                    <h1 class="login-title">ورود به سیستم</h1>
-                    <p class="login-subtitle">برای دسترسی به خدمات، ابتدا وارد شوید</p>
+                    <h1 class="login-title">Sign in</h1>
+                    <p class="login-subtitle">Please sign in to access services</p>
                 </div>
                 
                 <div class="login-content">
                     <!-- Login Form -->
                     <form id="loginForm" class="auth-form">
                         <div class="form-group">
-                            <label for="loginEmail">ایمیل:</label>
+                            <label for="loginEmail">Email:</label>
                             <input type="email" id="loginEmail" required>
                         </div>
                         <div class="form-group">
-                            <label for="loginPassword">رمز عبور:</label>
+                            <label for="loginPassword">Password:</label>
                             <input type="password" id="loginPassword" required>
                         </div>
-                        <button type="submit" class="auth-submit">ورود</button>
+                        <button type="submit" class="auth-submit">Sign in</button>
                         
                         <!-- Google Sign-In Button -->
                         <div class="social-login">
                             <div class="divider">
-                                <span>یا</span>
+                                <span>or</span>
                             </div>
+                            <div class="google-status" style="font-size:12px;color:#6c757d;margin-bottom:6px;"></div>
                             <button type="button" id="googleSignIn" class="google-signin-btn">
                                 <i class="fab fa-google"></i>
-                                <span>ورود با Google</span>
+                                <span>Sign in with Google</span>
                             </button>
                         </div>
                         
                         <p class="auth-switch">
-                            حساب کاربری ندارید؟ 
-                            <a href="#" id="showRegister">ثبت‌نام کنید</a>
+                            Don't have an account? 
+                            <a href="#" id="showRegister">Register</a>
                         </p>
                     </form>
                     
                     <!-- Register Form -->
                     <form id="registerForm" class="auth-form" style="display: none;">
                         <div class="form-group">
-                            <label for="registerName">نام کامل:</label>
+                            <label for="registerName">Full name:</label>
                             <input type="text" id="registerName" required>
-                            <small class="hint">نام و نام خانوادگی</small>
+                             <small class="hint">Full name</small>
                         </div>
 
                         <div class="form-group">
-                            <label>ایمیل:</label>
+                            <label>Email:</label>
                             <div class="input-row">
                                 <input type="email" id="registerEmail" required placeholder="example@email.com">
-                                <button type="button" id="sendEmailOtp" class="send-code-btn">ارسال کد</button>
+                                 <button type="button" id="sendEmailOtp" class="send-code-btn">Send code</button>
                             </div>
                             <div class="otp-row">
-                                <input type="text" id="emailOtpInput" inputmode="numeric" maxlength="6" placeholder="کد ۶ رقمی">
-                                <span id="emailVerifyStatus" class="status-badge">تایید نشده</span>
+                                <input type="text" id="emailOtpInput" inputmode="numeric" maxlength="6" placeholder="6-digit code">
+                                <span id="emailVerifyStatus" class="status-badge">Not verified</span>
                             </div>
-                            <small class="hint">پس از دریافت ایمیل، کد را اینجا وارد کنید.</small>
+                            <small class="hint">Enter the verification code after you receive the email.</small>
                         </div>
 
                         <div class="form-group">
-                            <label>شماره تلفن:</label>
+                            <label>Phone:</label>
                             <div class="input-row">
                                 <input type="tel" id="registerPhone" required placeholder="09xxxxxxxxx">
-                                <button type="button" id="sendSmsOtp" class="send-code-btn">ارسال کد SMS</button>
+                                 <button type="button" id="sendSmsOtp" class="send-code-btn">Send SMS code</button>
                             </div>
                             <div class="otp-row">
-                                <input type="text" id="smsOtpInput" inputmode="numeric" maxlength="6" placeholder="کد ۶ رقمی">
-                                <span id="smsVerifyStatus" class="status-badge">تایید نشده</span>
+                                <input type="text" id="smsOtpInput" inputmode="numeric" maxlength="6" placeholder="6-digit code">
+                                <span id="smsVerifyStatus" class="status-badge">Not verified</span>
                             </div>
-                            <small class="hint">با وارد کردن کد، شماره شما تایید می‌شود.</small>
+                            <small class="hint">Enter the code to verify your phone number.</small>
                         </div>
 
                         <div class="form-group">
-                            <label for="country">کشور:</label>
+                            <label for="country">Country:</label>
                             <select id="country">
                                 <option value="IR" selected>Iran</option>
                                 <option value="GB">United Kingdom</option>
@@ -114,55 +115,56 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="postalCode">کد پستی / شهر:</label>
-                            <input type="text" id="postalCode" placeholder="حداقل سه کاراکتر...">
+                            <label for="postalCode">Postcode / City:</label>
+                            <input type="text" id="postalCode" placeholder="Type at least 3 characters...">
                             <ul id="postalSuggestions" class="suggestions"></ul>
-                            <small class="hint">با تایپ حداقل ۳ کاراکتر، پیشنهادها نمایش داده می‌شود. مثل «cm» → Chelmsford</small>
+                            <small class="hint">Type at least 3 characters to see suggestions. e.g., "cm" → Chelmsford</small>
                         </div>
 
                         <div class="form-group">
-                            <label for="city">شهر:</label>
-                            <input type="text" id="city" placeholder="مثلاً تهران / Chelmsford">
+                            <label for="city">City:</label>
+                            <input type="text" id="city" placeholder="e.g., Tehran / Chelmsford">
                         </div>
 
                         <div class="form-group">
-                            <label for="province">استان/ایالت:</label>
-                            <input type="text" id="province" placeholder="مثلاً تهران / Essex">
+                            <label for="province">Province/State:</label>
+                            <input type="text" id="province" placeholder="e.g., Tehran / Essex">
                         </div>
 
                         <div class="form-group">
-                            <label for="registerPassword">رمز عبور:</label>
+                            <label for="registerPassword">Password:</label>
                             <input type="password" id="registerPassword" required>
                         </div>
 
                         <div class="form-group">
-                            <label for="addressLine">نشانی دقیق:</label>
-                            <input type="text" id="addressLine" placeholder="خیابان، کوچه، پلاک">
+                            <label for="addressLine">Address line:</label>
+                            <input type="text" id="addressLine" placeholder="Street, alley, number">
                         </div>
 
                         <div class="form-group checkbox-row">
                             <label>
                                 <input type="checkbox" id="acceptTerms" required>
-                                شرایط استفاده و حریم خصوصی را می‌پذیرم
+                                I accept the Terms and Privacy Policy
                             </label>
                         </div>
 
-                        <button type="submit" id="registerSubmit" class="auth-submit">ثبت‌نام</button>
+                            <button type="submit" id="registerSubmit" class="auth-submit">Register</button>
 
                         <!-- Google Sign-In Button -->
                         <div class="social-login">
                             <div class="divider">
-                                <span>یا</span>
+                                <span>or</span>
                             </div>
+                            <div class="google-status" style="font-size:12px;color:#6c757d;margin-bottom:6px;"></div>
                             <button type="button" id="googleSignInRegister" class="google-signin-btn">
                                 <i class="fab fa-google"></i>
-                                <span>ثبت‌نام با Google</span>
+                                <span>Register with Google</span>
                             </button>
                         </div>
 
                         <p class="auth-switch">
-                            قبلاً ثبت‌نام کرده‌اید؟ 
-                            <a href="#" id="showLogin">ورود کنید</a>
+                            Already registered? 
+                            <a href="#" id="showLogin">Sign in</a>
                         </p>
                     </form>
                 </div>
@@ -172,7 +174,7 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <p>&copy; 2024 سیستم مدیریت ساختمان</p>
+        <p>&copy; 2024 Construction Management System</p>
     </footer>
 
     <script src="../js/auth.js"></script>

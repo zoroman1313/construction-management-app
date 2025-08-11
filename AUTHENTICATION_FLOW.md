@@ -1,64 +1,64 @@
-# Authentication Flow - سیستم احراز هویت
+# Authentication Flow
 
-## Overview - خلاصه
+## Overview
 
-این سند توضیح می‌دهد که سیستم احراز هویت «ساده و بدون پلاگین» چگونه در اپلیکیشن مدیریت ساختمان کار می‌کند.
+This document explains how the “simple, no-plugin” authentication system works in the Construction Management app.
 
-## User Flow - جریان کاربری
+## User Flow
 
-### 1. Initial State - حالت اولیه
-- کاربر صفحه اصلی را با سه گزینه مشاهده می‌کند
-- دکمه ورود در هدر نمایش داده می‌شود
+### 1. Initial State
+- User sees the main page with three options
+- Sign-in button is shown in the header
 
-### 2. انتخاب بخش
-- 👥 کاربران (Users)
-- 🏗️ پیمانکاران (Contractors)
-- 🤝 ارایه‌دهندگان (Providers)
+### 2. Section selection
+- 👥 Users
+- 🏗️ Contractors
+- 🤝 Providers
 
-### 3. بررسی احراز هویت
-- اگر کاربر وارد نشده باشد → به `pages/login.html` با پارامتر مقصد هدایت می‌شود (مثل `?destination=users`)
-- اگر قبلاً وارد شده باشد → مستقیماً به صفحه مقصد هدایت می‌شود
+### 3. Authentication check
+- If the user is not signed in → redirect to `pages/login.html` with destination param (e.g., `?destination=users`)
+- If already signed in → go directly to the destination page
 
-### 4. بعد از ورود
-- نام و آواتار کاربر در هدر نمایش داده می‌شود
-- دکمه ورود با پروفایل کاربر جایگزین می‌شود
-- دکمه خروج فعال می‌شود
+### 4. After sign-in
+- User name and avatar are shown in the header
+- Sign-in button is replaced with user profile
+- Logout button is enabled
 
-## Technical Implementation - پیاده‌سازی فنی
+## Technical Implementation
 
-- کلاس `SimpleAuth` در `js/auth.js`
-- ذخیره کاربر در `localStorage` با کلید `currentUser`
-- لیست کاربران در `localStorage` با کلید `users`
-- API ساده در سطح سراسری: `window.simpleAuth`
+- `SimpleAuth` class in `js/auth.js`
+- Store current user in `localStorage` key `currentUser`
+- Users list in `localStorage` key `users`
+- Simple global API: `window.simpleAuth`
   - `login(email, password)`
   - `register(name, email, phone, password, extra)`
-  - `googleSignIn()` (شبیه‌سازی)
-  - `isLoggedIn()` و `getCurrentUser()`
+  - `googleSignIn()` (simulated if GIS not configured)
+  - `isLoggedIn()` and `getCurrentUser()`
   - `logout()`
 
-## Error Handling - مدیریت خطا
+## Error Handling
 
-- پیام‌های فارسی برای خطاهای لاگین/ثبت‌نام
-- تایید حداقل طول رمز عبور
-- بررسی تکراری نبودن ایمیل در زمان ثبت‌نام
-- اعلان‌های سبک (Toast) و خودکار حذف‌شونده
+- Clear error messages for login/register
+- Enforce minimum password length
+- Check duplicate email on register
+- Lightweight auto-dismissing toasts
 
-## Mobile - پاسخگویی موبایل
+## Mobile
 
-- فرم‌ها و دکمه‌ها برای لمس بهینه شده‌اند
-- صفحات داخلی نیز از همان الگوی هدر/پروفایل پیروی می‌کنند
+- Forms and buttons optimized for touch
+- Internal pages follow the same header/profile pattern
 
-## Security Notes - نکات امنیتی
+## Security Notes
 
-- این نسخه صرفاً نمونه بدون سرور است (دمو)
-- برای نسخه تولیدی باید سمت‌سرور و هش رمز عبور اضافه شود
+- Demo-only, no backend in this version
+- For production, add server-side and password hashing
 
-## Troubleshooting - عیب‌یابی
+## Troubleshooting
 
-- ورود کار نمی‌کند: ایمیل/رمز را بررسی کنید یا کاربر جدید ثبت‌نام کنید
-- پس از ورود هدایت نمی‌شود: `localStorage` را پاک کنید و دوباره تلاش کنید
-- پروفایل نمایش داده نمی‌شود: کنسول مرورگر را برای خطاهای جاوااسکریپت بررسی کنید
+- Sign-in not working: check email/password or register a new user
+- Not redirected after sign-in: clear `localStorage` and try again
+- Profile not shown: check browser console for JavaScript errors
 
 ---
 
-آخرین به‌روزرسانی: 2025-08
+Last updated: 2025-08

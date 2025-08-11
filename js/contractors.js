@@ -1,5 +1,5 @@
 // Contractors Management System - Construction Management App
-// سیستم مدیریت پیمانکاران - اپلیکیشن مدیریت ساختمان
+// Contractors management system - Construction Management App
 
 class ContractorsManager {
     constructor() {
@@ -70,33 +70,33 @@ class ContractorsManager {
         const sampleServices = [
             {
                 id: 1,
-                name: 'گزارش ماهانه پروژه',
+                name: 'Monthly project report',
                 type: 'reports',
-                description: 'گزارش کامل پیشرفت و هزینه‌های پروژه',
+                description: 'Comprehensive report of project progress and costs',
                 cost: 500000,
                 date: '2024-01-15'
             },
             {
                 id: 2,
-                name: 'برآورد پروژه مسکونی',
+                name: 'Residential project estimate',
                 type: 'estimates',
-                description: 'برآورد کامل هزینه و زمان ساخت',
+                description: 'Full estimate of construction cost and time',
                 cost: 2500000,
                 date: '2024-01-10'
             },
             {
                 id: 3,
-                name: 'مدیریت پروژه تجاری',
+                name: 'Commercial project management',
                 type: 'projects',
-                description: 'مدیریت کامل پروژه ساختمان تجاری',
+                description: 'Full management of commercial building project',
                 cost: 1500000,
                 date: '2024-01-05'
             },
             {
                 id: 4,
-                name: 'کنترل مالی پروژه',
+                name: 'Project financial control',
                 type: 'finances',
-                description: 'کنترل هزینه‌ها و درآمدهای پروژه',
+                description: 'Control of project costs and revenues',
                 cost: 800000,
                 date: '2024-01-01'
             }
@@ -115,17 +115,17 @@ class ContractorsManager {
     createServicePage(serviceType, services) {
         const mainContent = document.querySelector('.main .container');
         const serviceNames = {
-            'reports': 'گزارش‌ها',
-            'estimates': 'برآورد پروژه',
-            'projects': 'مدیریت پروژه',
-            'finances': 'مدیریت مالی'
+            'reports': 'Reports',
+            'estimates': 'Project estimates',
+            'projects': 'Project management',
+            'finances': 'Financial management'
         };
 
         mainContent.innerHTML = `
             <div class="page-header">
                 <button class="back-btn" onclick="goBackToContractors()">
-                    <i class="fas fa-arrow-right"></i>
-                    <span>بازگشت</span>
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back</span>
                 </button>
                 <h1 class="page-title">${serviceNames[serviceType]}</h1>
             </div>
@@ -134,12 +134,12 @@ class ContractorsManager {
                 <div class="stat-card">
                     <i class="fas fa-chart-line"></i>
                     <div class="stat-number">${services.length}</div>
-                    <div class="stat-label">کل ${serviceNames[serviceType]}</div>
+                    <div class="stat-label">Total ${serviceNames[serviceType]}</div>
                 </div>
                 <div class="stat-card">
                     <i class="fas fa-dollar-sign"></i>
                     <div class="stat-number">${this.formatCurrency(this.calculateTotalCost(services))}</div>
-                    <div class="stat-label">کل هزینه</div>
+                    <div class="stat-label">Total cost</div>
                 </div>
             </div>
             
@@ -191,11 +191,11 @@ class ContractorsManager {
                 <div class="empty-icon">
                     <i class="fas fa-folder-open"></i>
                 </div>
-                <h3>هیچ ${categoryName}ی یافت نشد</h3>
-                <p>برای شروع، اولین ${categoryName} را اضافه کنید</p>
+                <h3>No ${categoryName} found</h3>
+                <p>To get started, add the first ${categoryName.toLowerCase()}</p>
                 <button class="add-btn" onclick="showAddServiceForm()">
                     <i class="fas fa-plus"></i>
-                    <span>افزودن ${categoryName}</span>
+                    <span>Add ${categoryName}</span>
                 </button>
             </div>
         `;
@@ -242,7 +242,7 @@ class ContractorsManager {
         this.closeAddServiceModal();
         
         // Show success message
-        this.showMessage('سرویس جدید با موفقیت اضافه شد!', 'success');
+        this.showMessage('New service added successfully!', 'success');
         
         // Refresh current view if on a service page
         if (this.currentService) {
@@ -252,16 +252,16 @@ class ContractorsManager {
 
     editService(serviceId) {
         // Implementation for editing service
-        this.showMessage('قابلیت ویرایش به زودی اضافه خواهد شد', 'info');
+        this.showMessage('Editing capability will be added soon', 'info');
     }
 
     deleteService(serviceId) {
-        if (confirm('آیا مطمئن هستید که می‌خواهید این سرویس را حذف کنید؟')) {
+        if (confirm('Are you sure you want to delete this service?')) {
             this.services = this.services.filter(s => s.id !== serviceId);
             localStorage.setItem('contractorServices', JSON.stringify(this.services));
             
             this.updateServiceCounts();
-            this.showMessage('سرویس با موفقیت حذف شد', 'success');
+            this.showMessage('Service deleted successfully', 'success');
             
             // Refresh current view
             if (this.currentService) {
@@ -275,12 +275,12 @@ class ContractorsManager {
     }
 
     formatCurrency(amount) {
-        return new Intl.NumberFormat('fa-IR').format(amount);
+        return new Intl.NumberFormat('en-GB').format(amount);
     }
 
     formatDate(dateString) {
         const date = new Date(dateString);
-        return date.toLocaleDateString('fa-IR');
+        return date.toLocaleDateString('en-GB');
     }
 
     goBackToContractors() {
