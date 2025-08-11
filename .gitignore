@@ -21,13 +21,16 @@ yarn-error.log*
 # Build outputs
 /build/
 /dist/
+# Next.js build outputs (root and nested app under next/)
 /.next/
+next/.next/
 /.parcel-cache/
 /.vercel/
 coverage/
 
 # Dependency directories
 /node_modules/
+next/node_modules/
 
 # Local history
 .history/
