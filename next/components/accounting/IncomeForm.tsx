@@ -4,9 +4,11 @@ import { useState } from 'react'
 export default function IncomeForm(){
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
+  const [errors, setErrors] = useState<Record<string,string>>({})
 
   async function onSubmit(formData: FormData){
     setLoading(true); setMessage('')
+    setErrors({})
     const payload = {
       userId: 'demo-user',
       payerName: String(formData.get('payerName')||''),
@@ -21,7 +23,19 @@ export default function IncomeForm(){
     }
     const res = await fetch('/api/income', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) })
     if (res.ok) setMessage('Saved')
-    else setMessage('Error')
+    else {
+      setMessage('Error')
+      try{
+        const j = await res.json()
+        const f = (j?.error||{})
+        const mapped: Record<string,string> = {}
+        for (const k of Object.keys(f)){
+          const issue = f[k]
+          if (issue && issue._errors && issue._errors.length) mapped[k] = issue._errors[0]
+        }
+        setErrors(mapped)
+      }catch{}
+    }
     setLoading(false)
   }
 
@@ -33,10 +47,12 @@ export default function IncomeForm(){
         <label className="space-y-1">
           <span className="text-sm">Payer name</span>
           <input name="payerName" required className="w-full rounded border px-3 py-2" />
+          {errors.payerName && <p className="text-xs text-red-600">{errors.payerName}</p>}
         </label>
         <label className="space-y-1">
           <span className="text-sm">Amount</span>
           <input name="amount" type="number" step="0.01" min="0" required className="w-full rounded border px-3 py-2" />
+          {errors.amount && <p className="text-xs text-red-600">{errors.amount}</p>}
         </label>
         <label className="space-y-1">
           <span className="text-sm">Method</span>
@@ -44,6 +60,7 @@ export default function IncomeForm(){
             <option>Cash</option>
             <option>BankTransfer</option>
           </select>
+          {errors.method && <p className="text-xs text-red-600">{errors.method}</p>}
         </label>
         <label className="space-y-1">
           <span className="text-sm">Bank (optional)</span>
@@ -60,6 +77,7 @@ export default function IncomeForm(){
         <label className="space-y-1">
           <span className="text-sm">Received at</span>
           <input name="receivedAt" type="date" defaultValue={today} required className="w-full rounded border px-3 py-2" />
+          {errors.receivedAt && <p className="text-xs text-red-600">{errors.receivedAt}</p>}
         </label>
         <label className="space-y-1">
           <span className="text-sm">Project Id (optional)</span>

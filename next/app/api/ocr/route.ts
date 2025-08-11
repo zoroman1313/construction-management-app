@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { ReceiptParseRequest } from '@/lib/ocr/contracts'
-import parserLocal, { parserLocal as parserAlias } from '@/lib/ocr/parserLocal'
+import { parserLocal } from '@/lib/ocr/parserLocal'
+import { parserRemote } from '@/lib/ocr/parserRemote'
+
+const USE_REMOTE = process.env.USE_REMOTE_OCR === 'true'
 
 export async function POST(req: NextRequest) {
   const body = (await req.json()) as ReceiptParseRequest
   try {
-    // support default export or named as per spec
-    const parser = (parserAlias || parserLocal) as any
+    const parser = USE_REMOTE ? parserRemote : parserLocal
     const result = await parser.parse(body)
     return NextResponse.json(result)
   } catch (e:any) {

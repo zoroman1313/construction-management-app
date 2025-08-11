@@ -3,14 +3,24 @@ import { parseAmount } from '@/lib/utils/money'
 import * as screwfix from './vendors/screwfix'
 import * as bq from './vendors/bq'
 import * as toolstation from './vendors/toolstation'
+import * as toppsTiles from './vendors/toppsTiles'
+import * as mpMoran from './vendors/mpMoran'
+import * as wickes from './vendors/wickes'
+import * as chrisStevens from './vendors/chrisStevens'
+import * as tradepoint from './vendors/tradepoint'
 
-const KNOWN_VENDORS = ['Screwfix','B&Q','Toolstation','Wickes','Builders Depot']
+const KNOWN_VENDORS = ['Screwfix','B&Q','Toolstation','Wickes','Builders Depot','Topps Tiles','MP Moran','Chris Stevens','TradePoint']
 
 function detectVendor(text: string): string | undefined {
   const t = text.toLowerCase()
   if (screwfix.isVendor(text)) return 'Screwfix'
   if (bq.isVendor(text)) return 'B&Q'
   if (toolstation.isVendor(text)) return 'Toolstation'
+  if (toppsTiles.isVendor(text)) return 'Topps Tiles'
+  if (mpMoran.isVendor(text)) return 'MP Moran'
+  if (wickes.isVendor(text)) return 'Wickes'
+  if (chrisStevens.isVendor(text)) return 'Chris Stevens'
+  if (tradepoint.isVendor(text)) return 'TradePoint'
   for (const v of KNOWN_VENDORS) {
     if (t.includes(v.toLowerCase().replace('&','&'))) return v
   }
@@ -82,6 +92,21 @@ export const parserLocal: IReceiptParser = {
       } else if (vendor === 'Toolstation') {
         totals = { ...totals, ...toolstation.extractTotals(raw_text) }
         line_items = toolstation.extractLineItems(raw_text)
+      } else if (vendor === 'Topps Tiles') {
+        totals = { ...totals, ...toppsTiles.extractTotals(raw_text) }
+        line_items = toppsTiles.extractLineItems(raw_text)
+      } else if (vendor === 'MP Moran') {
+        totals = { ...totals, ...mpMoran.extractTotals(raw_text) }
+        line_items = mpMoran.extractLineItems(raw_text)
+      } else if (vendor === 'Wickes') {
+        totals = { ...totals, ...wickes.extractTotals(raw_text) }
+        line_items = wickes.extractLineItems(raw_text)
+      } else if (vendor === 'Chris Stevens') {
+        totals = { ...totals, ...chrisStevens.extractTotals(raw_text) }
+        line_items = chrisStevens.extractLineItems(raw_text)
+      } else if (vendor === 'TradePoint') {
+        totals = { ...totals, ...tradepoint.extractTotals(raw_text) }
+        line_items = tradepoint.extractLineItems(raw_text)
       }
 
       const matched = ['vendor','date','total','payment'].filter(Boolean).length

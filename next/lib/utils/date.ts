@@ -1,9 +1,3 @@
-export const parseAmount = (s: string) => {
-  const m = s.replace(/[^0-9.,-]/g, '').replace(',', '.');
-  const n = Number(m);
-  return isNaN(n) ? undefined : n;
-};
-
 export const parsePossiblyEuropeanDate = (s?: string) => {
   if (!s) return undefined;
   // Try YYYY-MM-DD or DD/MM/YYYY

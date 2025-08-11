@@ -1,11 +1,18 @@
 import { dbConnect } from '@/lib/db/mongoose'
 import Income from '@/lib/models/Income'
 import Expense from '@/lib/models/Expense'
+import { Suspense } from 'react'
 
-export default async function AccountingHome() {
+function getDateFromSearch(searchParams: Record<string,string|undefined>){
+  const q = (searchParams?.date || '').toString()
+  if (/^\d{4}-\d{2}-\d{2}$/.test(q)) return new Date(q)
+  return new Date()
+}
+
+export default async function AccountingHome({ searchParams }: { searchParams?: Record<string,string|undefined> }) {
   await dbConnect()
-  const today = new Date()
-  const start = new Date(today.toISOString().slice(0,10))
+  const base = getDateFromSearch(searchParams||{})
+  const start = new Date(base.toISOString().slice(0,10))
   const end = new Date(start); end.setDate(end.getDate()+1)
 
   const [incomes, expenses] = await Promise.all([
@@ -17,7 +24,8 @@ export default async function AccountingHome() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">Daily balance (Today)</h1>
+      <h1 className="text-2xl font-semibold">Daily balance</h1>
+      <DatePickerControls dateISO={start.toISOString().slice(0,10)} />
       <div className="rounded-lg border p-4">
         <div>Total income: £{totalIncome.toFixed(2)}</div>
         <div>Total expense: £{totalExpense.toFixed(2)}</div>
@@ -39,6 +47,15 @@ export default async function AccountingHome() {
         <a className="rounded-lg border p-4 hover:bg-slate-50" href="/accounting/receipt">Receipt OCR</a>
       </div>
     </div>
+  )
+}
+
+function DatePickerControls({ dateISO }: { dateISO: string }){
+  return (
+    <form action="/accounting" className="flex items-center gap-2">
+      <input type="date" name="date" defaultValue={dateISO} className="rounded border px-3 py-2" />
+      <button className="rounded bg-black px-3 py-2 text-white">Go</button>
+    </form>
   )
 }
 
