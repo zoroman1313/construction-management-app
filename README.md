@@ -77,3 +77,25 @@ For questions and suggestions, please contact the development team.
 ---
 
 Built with ❤️ for the construction industry
+
+## 🔗 Repository
+
+- GitHub: `https://github.com/zoroman1313/jobbaazar`
+
+## ⚙️ CI
+
+This repo includes a lightweight GitHub Actions workflow that:
+
+- Installs dependencies for the Next app in `next/`
+- Runs `npm run lint`
+- Builds the app with `npm run build`
+
+The workflow runs on pushes to `main` and on pull requests.
+
+## ▶️ Develop the Next app
+
+```
+cd next
+npm install
+npm run dev
+```
