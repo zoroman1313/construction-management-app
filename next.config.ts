@@ -1,9 +1,11 @@
 import type { NextConfig } from "next";
-// next.config.js
-/** @type {import('next').NextConfig} */
+
 const nextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
+  eslint: { ignoreDuringBuilds: true },
+  async redirects() {
+    return [
+      { source: "/", destination: "/accounting", permanent: true },
+    ];
   },
 };
 
